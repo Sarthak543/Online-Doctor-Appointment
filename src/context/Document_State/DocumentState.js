@@ -9,10 +9,18 @@ const DocumentState= ({children})=>{
     Creating  an empty dictionary of doctor detail
     this dictionary is mapped with the registration form of docter
     */
+    const [patData,setPatData] = useState({
+        name:"",
+        email:"",
+        mobile:0,
+        password:"",
+        gender:""
+    });
+    
     const [docData,setDocData] = useState({
         name:"",
         email:"",
-        mobile:"",
+        mobile:0,
         password:"",
         gender:"",
         experience:"",
@@ -23,7 +31,7 @@ const DocumentState= ({children})=>{
         city:"",
         zipCode:"",
         nationality:"",
-        governmentID:"",
+        governmentId:"",
         expLetter:null,
         dp:null
     });
@@ -34,7 +42,7 @@ const DocumentState= ({children})=>{
 
 
 return (
-    <DocumentContext.Provider value = {{bg,setbg,docData,setDocData,signIn,setSignIn}}>
+    <DocumentContext.Provider value = {{bg,setbg,docData,setDocData,patData,setPatData,signIn,setSignIn}}>
         {children}
     </DocumentContext.Provider>
 )
