@@ -3,3 +3,11 @@
   padding: 0;
   overflow: hidden;
 }
+
+.table.table-hover tr,
+.table.table-hover th,
+.table.table-hover td {
+    background-color: rgba(0, 0, 0, 0);
+    border: 3px solid;
+    border-color: rgb(214 224 210);
+}

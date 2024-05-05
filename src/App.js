@@ -9,6 +9,10 @@ import Form2 from './components/Form2';
 import SignIn from './components/SignIn';
 import PatientRegistration from './components/PatientRegistration';
 import Register from './components/Register';
+import DoctorPanel from './components/Doctor Panel/DoctorPanel';
+import CheckAppointment from './components/Doctor Panel/CheckAppointment';
+import AppointmentHistory from './components/Doctor Panel/AppointmentHistory';
+import FeedBack from './components/Doctor Panel/FeedBack'
 function App() {
   const router = createBrowserRouter([
     {
@@ -35,6 +39,15 @@ function App() {
     {
       path:'Register',
       element:<Register/>
+    },
+    {
+      path:'DoctorPanel',
+      element:<DoctorPanel/>,
+      children:[
+        {path:"/DoctorPanel/check-appointment", element: <CheckAppointment/>},
+        {path:"/DoctorPanel/consultant-history", element: <AppointmentHistory/>},
+        {path:"/DoctorPanel/feedback",element:<FeedBack/>}
+      ]
     }
   ])
   return (
