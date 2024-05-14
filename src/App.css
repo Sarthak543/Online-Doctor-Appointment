@@ -11,3 +11,30 @@
     border: 3px solid;
     border-color: rgb(214 224 210);
 }
+
+.booked {
+  color: red;
+  /* color: white; */
+}
+
+.available {
+  color: green;
+  /* color: white; */
+}
+
+
+
+/* Home Page  */
+.home_div_bg{
+    position: absolute;
+    top : 58%;
+    left : 83%;
+    transform: translate(-50%, -50%);
+    height:100vh;
+    width:35vw;
+}
+
+.img_bg{
+  height: 680px;
+  width: 490px;
+}

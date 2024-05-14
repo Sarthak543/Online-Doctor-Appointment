@@ -22,8 +22,7 @@ export default function DoctorPanel() {
           <div
             className="w-25 border-end border-2 border-secondary-subtle"
             style={{
-              minHeight: "100vh",
-              height: "auto"
+              minHeight: "100vh"
             }}
           >
             <div style={backgroundStyle}></div>

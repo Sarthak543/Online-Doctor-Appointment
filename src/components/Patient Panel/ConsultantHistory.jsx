@@ -1,82 +1,22 @@
 import React from "react";
 
-export default function CheckAppointment() {
-  const backgroundStyle = {
-    position: "absolute",
-    backgroundImage: `url(../test1.jpg)`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    height: "100vh",
-    width: "100%",
-    maxWidth: "100vw",
-    overflowX: "hidden",
-    zIndex: "-1",
-  };
+export default function ConsultantHistory() {
   return (
     <>
-      <div style={backgroundStyle}></div>
-      <div className="container d-flex justify-content-around align-items-center h-25">
-        <div
-          className="border rounded-4 h-75 w-25 d-flex"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <div className="w-25  d-flex justify-content-end align-items-center">
-            <i
-              className="fa-solid fa-hospital-user"
-              style={{ fontSize: "60px" }}
-            ></i>
-          </div>
-          <div className="w-75 d-flex flex-column justify-content-center">
-            <div className="">
-              <p className="text-center fw-medium fs-5">Total Patient</p>
-              <p className="text-center fw-medium fs-5 mb-0">2000+</p>
-              <p className="text-center">Till Today</p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="border  rounded-4 h-75 w-25 d-flex"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <div className="w-25  d-flex justify-content-center align-items-center">
-            <i
-              className="fa-regular fa-calendar-check"
-              style={{ fontSize: "50px" }}
-            ></i>
-          </div>
-          <div className="w-75 d-flex flex-column">
-            <div className="mt-5">
-              <p className="text-center fw-medium ">Today Appointment: 29</p>
-              <p className="text-center fw-medium">2/05/2024</p>
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="border  rounded-4 h-75 w-25"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <p className="text-center fs-5 fw-bold">Tip of the day</p>
-          <p className="ms-2">
-            Regular exercise has numerous benefits, including stress reduction,
-            improved cardiovascular health.
-          </p>
-        </div>
+      <div className="container text-center fs-2 fw-bold">
+        Consultant History
       </div>
-      {/* Table that shows appointments */}
-      <div className="container" style={{ width: "65vw" }}>
-        <p className="text-center fs-4 fw-bold">Appointments</p>
-        <div className="border-top rounded-2">
-          {/* appointmnet table */}
+      <div className="container w-75">
+        <div className="border-top rounded-2 mt-5">
+          {/* Consultant table */}
           <table className="table table-hover transparent-table">
             <thead>
               <tr className="table-color">
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
-                <th scope="col text-end">Actions</th>
+                <th scope="col">SNo.</th>
+                <th scope="col">Doctor Name</th>
+                <th scope="col">Appointment Date</th>
+                <th scope="col">Mobile</th>
+                <th scope="col text-end">History</th>
               </tr>
             </thead>
             <tbody>
@@ -87,10 +27,10 @@ export default function CheckAppointment() {
                 <td>@mdo</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -101,10 +41,10 @@ export default function CheckAppointment() {
                 <td>@fat</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -114,10 +54,10 @@ export default function CheckAppointment() {
                 <td>@twitter</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -126,12 +66,10 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                  <button className="btn btn-success badge-pill me-3">
+                    Open
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
-                  </button>
+                  <button className="btn btn-danger badge-pill">Delete</button>
                 </td>
               </tr>
               <tr>
@@ -140,10 +78,10 @@ export default function CheckAppointment() {
                 <td>@twitter</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -153,10 +91,10 @@ export default function CheckAppointment() {
                 <td>@twitter</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>
@@ -166,10 +104,10 @@ export default function CheckAppointment() {
                 <td>@twitter</td>
                 <td className="w-25">
                   <button className="btn btn-success badge-pill text-end me-3">
-                    Consult
+                    Open
                   </button>
                   <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                    Delete
                   </button>
                 </td>
               </tr>

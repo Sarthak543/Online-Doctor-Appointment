@@ -13,6 +13,11 @@ import DoctorPanel from './components/Doctor Panel/DoctorPanel';
 import CheckAppointment from './components/Doctor Panel/CheckAppointment';
 import AppointmentHistory from './components/Doctor Panel/AppointmentHistory';
 import FeedBack from './components/Doctor Panel/FeedBack'
+import PatientPanel from './components/Patient Panel/PatientPanel';
+import BookAppointment from './components/Patient Panel/BookAppointment';
+import ConsultantHistory from './components/Patient Panel/ConsultantHistory';
+import ViewBookedAppointment from './components/Patient Panel/ViewBookedAppointment';
+import Appointment_Calender from './components/Patient Panel/Appointment_Calender';
 function App() {
   const router = createBrowserRouter([
     {
@@ -23,7 +28,7 @@ function App() {
       path: "/DocterRegistration",
       element: <DocterRegisteration />,
       children: [
-        { path: "/DocterRegistration", element: <DocterRegisteration/> }, // Default route within DoctorRegistration
+        { path: "DocterRegistration", element: <DocterRegisteration/> }, // Default route within DoctorRegistration
         { path: "/DocterRegistration/form1", element: <Form1/> },
         { path: "/DocterRegistration/form2", element: <Form2/> }
       ]
@@ -47,6 +52,16 @@ function App() {
         {path:"/DoctorPanel/check-appointment", element: <CheckAppointment/>},
         {path:"/DoctorPanel/consultant-history", element: <AppointmentHistory/>},
         {path:"/DoctorPanel/feedback",element:<FeedBack/>}
+      ]
+    },
+    {
+      path:'PatientPanel',
+      element:<PatientPanel/>,
+      children:[
+        {path:"/PatientPanel/bookAppointment", element: <BookAppointment/>},
+        {path:"/PatientPanel/ConsultantHistory", element: <ConsultantHistory/>},
+        {path:"/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment/>},
+        {path:"/PatientPanel/date", element: <Appointment_Calender/>}
       ]
     }
   ])
