@@ -4,6 +4,7 @@
   overflow: hidden;
 }
 
+/* Tables formatting */
 .table.table-hover tr,
 .table.table-hover th,
 .table.table-hover td {
@@ -12,6 +13,7 @@
     border-color: rgb(214 224 210);
 }
 
+/* Fomatting class for calendar */
 .booked {
   color: red;
   /* color: white; */
@@ -24,7 +26,7 @@
 
 
 
-/* Home Page  */
+/* Home Page doctor and background green div formating classes*/
 .home_div_bg{
     position: absolute;
     top : 58%;
@@ -32,9 +34,27 @@
     transform: translate(-50%, -50%);
     height:100vh;
     width:35vw;
+    z-index: 2;
 }
 
 .img_bg{
   height: 680px;
   width: 490px;
+}
+
+.green-bg{
+  position: absolute;
+  top: 16%;
+  left: 5%;
+  height: 65vh;
+  width: 30vw;
+  background: rgba(39,191,150,255);
+  border: 1px;
+  border-radius: 100%;
+  z-index: -1;
+}
+
+/* Sign in form google and facebook logo */
+.logo{
+  height: 20px;
 }
