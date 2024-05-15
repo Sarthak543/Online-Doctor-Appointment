@@ -86,11 +86,11 @@ export default function CheckAppointment() {
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger badge-pill text-end w-50">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -100,11 +100,11 @@ export default function CheckAppointment() {
                 <td>Thornton</td>
                 <td>@fat</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end  me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger badge-pill w-50 text-end ">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -113,11 +113,11 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger badge-pill w-50 text-end">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -126,11 +126,11 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -139,11 +139,11 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -152,11 +152,11 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
+                    Reschedule
                   </button>
                 </td>
               </tr>
@@ -165,18 +165,18 @@ export default function CheckAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-success badge-pill text-end me-3">
+                  <button className="btn btn-outline-success badge-pill text-end me-3">
                     Consult
                   </button>
-                  <button className="btn btn-danger badge-pill text-end">
-                    Rescheduled
+                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
+                    Reschedule
                   </button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between" style={{marginBottom:'15vh'}}>
           <button className="btn btn-primary m-2">Previous</button>
           <button className="btn btn-primary m-2">Next</button>
         </div>

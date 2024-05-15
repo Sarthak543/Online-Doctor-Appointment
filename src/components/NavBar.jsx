@@ -3,7 +3,7 @@ import React from "react";
 export default function NavBar() {
   return (
     <>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light bg-transparent">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light bg-transparent shadow-sm">
         <div className="container-fluid">
           <div className="container w-25">
             <img className="w-50" src="../logo.png" alt="#" />
@@ -29,7 +29,7 @@ export default function NavBar() {
                   <a
                     className="nav-link active fs-"
                     aria-current="page"
-                    href="#"
+                    href="/"
                   >
                     Home
                   </a>

@@ -6,7 +6,7 @@ export default function BookAppointment() {
     <>
       <h1 className="text-center">Book an appointment</h1>
       <div className="container w-50 border border-danger">
-        <form action="" method="get" className="mt-5">
+        <form action="" method="get" className="mt-5"  style={{marginBottom:'15vh'}}>
           <div className="row ms-2 fs-6 fw-bold">Doctors details</div>
           <hr />
           <div className="row">

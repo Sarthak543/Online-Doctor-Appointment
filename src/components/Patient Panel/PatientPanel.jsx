@@ -2,21 +2,8 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 
 export default function PatientPanel() {
-  const backgroundStyle = {
-    position: "absolute",
-    backgroundImage: `url(../test1.jpg)`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    height: "100vh",
-    width: "100%",
-    maxWidth: "100vw",
-    overflowX: "hidden",
-    zIndex: "-1",
-  };
   return (
     <>
-      <div style={backgroundStyle}></div>
       <div className="d-flex" style={{ height: "100vh" }}>
         <div className="w-25">
           <div>
@@ -80,8 +67,8 @@ export default function PatientPanel() {
             </div>
           </Link>
         </div>
-        <div className="w-75 border border-danger" style={{overflowY:'auto'}}>
-          <Outlet />
+        <div className="w-75 " style={{overflowY:'auto',background: 'rgb(240, 239, 238)'}} >
+            <Outlet />
         </div>
       </div>
     </>

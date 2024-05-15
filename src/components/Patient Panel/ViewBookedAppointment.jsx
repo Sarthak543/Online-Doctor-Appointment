@@ -3,8 +3,8 @@ import React from "react";
 export default function ViewBookedAppointment() {
   return (
     <>
-      <div className="container text-center fs-2 fw-bold">
-        Consultant History
+      <div className="container text-center fs-2 fw-bold mt-4">
+        Appointment History
       </div>
       <div className="container w-75">
         <div className="border-top rounded-2 mt-5">
@@ -26,7 +26,7 @@ export default function ViewBookedAppointment() {
                 <td>Otto</td>
                 <td>@mdo</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -37,7 +37,7 @@ export default function ViewBookedAppointment() {
                 <td>Thornton</td>
                 <td>@fat</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -47,7 +47,7 @@ export default function ViewBookedAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -57,7 +57,7 @@ export default function ViewBookedAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -67,7 +67,7 @@ export default function ViewBookedAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -77,7 +77,7 @@ export default function ViewBookedAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -87,7 +87,7 @@ export default function ViewBookedAppointment() {
                 <td colspan="2">Larry the Bird</td>
                 <td>@twitter</td>
                 <td className="w-25">
-                  <button className="btn btn-danger badge-pill  ms-5 w-50">
+                  <button className="btn btn-outline-danger badge-pill  ms-5 w-50">
                     Cancel
                   </button>
                 </td>
@@ -95,7 +95,7 @@ export default function ViewBookedAppointment() {
             </tbody>
           </table>
         </div>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between" style={{marginBottom:'15vh'}}>
           <button className="btn btn-primary m-2">Previous</button>
           <button className="btn btn-primary m-2">Next</button>
         </div>
