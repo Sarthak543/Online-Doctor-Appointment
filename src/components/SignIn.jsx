@@ -1,20 +1,54 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
+import { Link, useNavigate } from "react-router-dom";
+import {toast } from 'react-toastify';
 
 export default function SignIn() {
-  const { signIn, setSignIn } = useContext(documentContext);
-  let signInType = "";
-  useEffect(() => {
-    /*
-    Instead of creating two forms for user and patient, we create a state signIn in documentContext
-    whenever we come to this form from the home component the value of signIn is changed by the Home Component
-    Here according to the signIn type(doctor/patient) we will make the request for log in purpose 
-    signInType
-    */
-    signInType = signIn;
-    console.log(signInType);
-    setSignIn("");
-  }, []);
+  let navigate = useNavigate();
+  let url = "";
+  const a = useContext(documentContext);
+  const { signIn } = a;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignUp = () => {
+    if (signIn === "patient") {
+      navigate("/PatientRegistration");
+    } else {
+      navigate("/DocterRegistration/form1");
+    }
+  };
+
+  const FormSignInHandler = async (e) => {
+    e.preventDefault();
+    if (signIn === "patient") {
+      url = `http://localhost:8010/patientLogin/${email}/${password}`;
+    } else {
+      url = `http://localhost:8010/doctorLogin/${email}/${password}`;
+    }
+
+    const formData = new FormData();
+    formData.append('email',email)
+    formData.append('password',password)
+
+    console.log(email+"     "+password+"       "+signIn)
+    // API call
+    try {
+      const response = await fetch(url, {
+        method: "post",
+      });
+      if (response == null) {
+        alert("No user found");
+      } else {
+        const data = await response.json();
+        toast.success("User Found");
+        console.log(data);
+      }
+    } catch (error) {
+      toast.error("Incorrect Details");
+    }
+  };
+
 
   return (
     <>
@@ -28,7 +62,7 @@ export default function SignIn() {
         </div>
         <div className="w-50">
           <p className="fs-1  text-center">Login </p>
-          <form className="m-4 mb-2 p-4/">
+          <form className="m-4 mb-2 p-4/" onSubmit={FormSignInHandler}>
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">
                 Email address
@@ -38,6 +72,9 @@ export default function SignIn() {
                 class="form-control border rounded-2"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <div id="emailHelp" class="form-text">
                 We'll never share your email with anyone else.
@@ -51,6 +88,9 @@ export default function SignIn() {
                 type="password"
                 class="form-control border rounded-2"
                 id="exampleInputPassword1"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div class="mb-3 form-check pl-1">
@@ -74,13 +114,18 @@ export default function SignIn() {
           <p className="text-center fs-7 text-dark mb-2">OR</p>
           <div className="d-flex justify-content-center">
             <button className="btn  me-4 border rounded-3">
-              <img className="logo" src="../google.png"/>
+              <img className="logo" src="../google.png" alt="#" />
               <p className=" ms-2 d-inline">Google</p>
             </button>
             <button className="btn border rounded-3">
-            <img className="logo" src="../facebook.png"/>
-            <p className=" ms-2 d-inline">Facebook</p>
+              <img className="logo" src="../facebook.png" alt="#" />
+              <p className=" ms-2 d-inline">Facebook</p>
             </button>
+          </div>
+          <div className="text-center">
+            <Link className="text-reset" onClick={handleSignUp}>
+              Create Account
+            </Link>
           </div>
         </div>
       </div>
