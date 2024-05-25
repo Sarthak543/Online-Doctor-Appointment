@@ -18,6 +18,8 @@ import BookAppointment from './components/Patient Panel/BookAppointment';
 import ConsultantHistory from './components/Patient Panel/ConsultantHistory';
 import ViewBookedAppointment from './components/Patient Panel/ViewBookedAppointment';
 import Appointment_Calender from './components/Patient Panel/Appointment_Calender';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const router = createBrowserRouter([
     {
@@ -28,40 +30,40 @@ function App() {
       path: "/DocterRegistration",
       element: <DocterRegisteration />,
       children: [
-        { path: "DocterRegistration", element: <DocterRegisteration/> }, // Default route within DoctorRegistration
-        { path: "/DocterRegistration/form1", element: <Form1/> },
-        { path: "/DocterRegistration/form2", element: <Form2/> }
+        { path: "DocterRegistration", element: <DocterRegisteration /> }, // Default route within DoctorRegistration
+        { path: "/DocterRegistration/form1", element: <Form1 /> },
+        { path: "/DocterRegistration/form2", element: <Form2 /> }
       ]
     },
     {
-      path:'signIn',
-      element: <SignIn/>
+      path: 'signIn',
+      element: <SignIn />
     },
     {
-      path:'PatientRegistration',
-      element: <PatientRegistration/>
+      path: 'PatientRegistration',
+      element: <PatientRegistration />
     },
     {
-      path:'Register',
-      element:<Register/>
+      path: 'Register',
+      element: <Register />
     },
     {
-      path:'DoctorPanel',
-      element:<DoctorPanel/>,
-      children:[
-        {path:"/DoctorPanel/check-appointment", element: <CheckAppointment/>},
-        {path:"/DoctorPanel/consultant-history", element: <AppointmentHistory/>},
-        {path:"/DoctorPanel/feedback",element:<FeedBack/>}
+      path: 'DoctorPanel',
+      element: <DoctorPanel />,
+      children: [
+        { path: "/DoctorPanel/check-appointment", element: <CheckAppointment /> },
+        { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory /> },
+        { path: "/DoctorPanel/feedback", element: <FeedBack /> }
       ]
     },
     {
-      path:'PatientPanel',
-      element:<PatientPanel/>,
-      children:[
-        {path:"/PatientPanel/bookAppointment", element: <BookAppointment/>},
-        {path:"/PatientPanel/ConsultantHistory", element: <ConsultantHistory/>},
-        {path:"/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment/>},
-        {path:"/PatientPanel/date", element: <Appointment_Calender/>}
+      path: 'PatientPanel',
+      element: <PatientPanel />,
+      children: [
+        { path: "/PatientPanel/bookAppointment", element: <BookAppointment /> },
+        { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory /> },
+        { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment /> },
+        { path: "/PatientPanel/date", element: <Appointment_Calender /> }
       ]
     }
   ])
@@ -71,6 +73,10 @@ function App() {
         <NavBar />
         <RouterProvider router={router} />
       </DocumentState>
+      <ToastContainer
+        position="top-center"
+        theme="dark"
+      />
     </>
   );
 }
