@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
+import { addUserData, getUserData } from "../IndexDB_Operation";
 import { Link, useNavigate } from "react-router-dom";
-import {toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   let navigate = useNavigate();
@@ -28,10 +29,9 @@ export default function SignIn() {
     }
 
     const formData = new FormData();
-    formData.append('email',email)
-    formData.append('password',password)
+    formData.append("email", email);
+    formData.append("password", password);
 
-    console.log(email+"     "+password+"       "+signIn)
     // API call
     try {
       const response = await fetch(url, {
@@ -43,12 +43,24 @@ export default function SignIn() {
         const data = await response.json();
         toast.success("User Found");
         console.log(data);
+
+        if (signIn === "patient") {
+          // Saving data to indexedDB
+          await addUserData(data, "OnlineDoctorAppointment", "Patient");
+          // Saving the email to the local storage so that we can retrieve data from indexDB later
+          localStorage.setItem("Patient", email);
+          navigate("/PatientPanel");
+        } else {
+          await addUserData(data, "OnlineDoctorAppointment", "Doctor");
+          localStorage.setItem("Doctor", email);
+          navigate("/DoctorPanel");
+        }
       }
     } catch (error) {
+      console.log(error);
       toast.error("Incorrect Details");
     }
   };
-
 
   return (
     <>
