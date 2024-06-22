@@ -1,7 +1,20 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link, Outlet } from "react-router-dom";
+import { getUserData } from "../../IndexDB_Operation";
 
 export default function PatientPanel() {
+  const [patient, setpatient] = useState({})
+  useEffect(async() => {
+    const patientEmail = localStorage.getItem("Patient")
+    console.clear()
+    console.log(patientEmail)
+    const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
+    console.log(result)
+    console.log("Type of result is ",typeof(result))
+    setpatient(result)
+  }, [])
+  
+  
   return (
     <>
       <div className="d-flex" style={{ height: "100vh" }}>
@@ -11,12 +24,13 @@ export default function PatientPanel() {
             <div className="d-flex justify-content-center pt-4 pb-2">
               <img
                 className="border border-dark rounded-circle"
+                id="dp"
                 style={{ width: "30%", height: "20vh" }}
-                src="../doctor.png"
-                alt=""
+                src={`data:image/jpeg;base64,${patient.image}`} 
+                alt="Description"
               />
             </div>
-            <p className="text-center fw-bold">Sarthak Jaiswal</p>
+            <p className="text-center fw-bold">{patient.name}</p>
           </div>
 
           {/* Options  */}
@@ -30,7 +44,7 @@ export default function PatientPanel() {
                 className="d-flex align-items-center"
                 style={{ paddingLeft: "3vw", cursor: "pointer" }}
               >
-                <i class="fa-solid fa-receipt me-2"></i>
+                <i className="fa-solid fa-receipt me-2"></i>
                 <p className="fw-medium mt-3">Book Appointments</p>
               </div>
             </Link>
@@ -61,14 +75,17 @@ export default function PatientPanel() {
                 className="d-flex align-items-center"
                 style={{ paddingLeft: "3vw", cursor: "pointer" }}
               >
-                <i class="fa-solid fa-eye me-2"></i>
+                <i className="fa-solid fa-eye me-2"></i>
                 <p className="fw-medium mt-3">View Booked Appointment</p>
               </div>
             </div>
           </Link>
         </div>
-        <div className="w-75 " style={{overflowY:'auto',background: 'rgb(240, 239, 238)'}} >
-            <Outlet />
+        <div
+          className="w-75 "
+          style={{ overflowY: "auto", background: "rgb(240, 239, 238)" }}
+        >
+          <Outlet />
         </div>
       </div>
     </>

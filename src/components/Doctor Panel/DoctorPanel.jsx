@@ -1,8 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { getUserData } from "../../IndexDB_Operation";
 
 export default function DoctorPanel() {
+
+  const [doctor, setdoctor] = useState({})
+  useEffect(async() => {
+    const doctorEmail = localStorage.getItem("Doctor")
+    const result = await getUserData(doctorEmail,"OnlineDoctorAppointment", "Doctor")
+    setdoctor(result)
+    console.clear()
+    console.log(result)
+  }, [])
+  
+
+
   return (
     <>
       <div>
@@ -20,11 +33,11 @@ export default function DoctorPanel() {
                 <img
                   className="border border-dark rounded-circle"
                   style={{ width: "30%", height: "20vh" }}
-                  src="../doctor.png"
+                  src={`data:image/jpeg;base64,${doctor.profilePhoto}`} 
                   alt=""
                 />
               </div>
-              <p className="text-center fw-bold">Sarthak Jaiswal</p>
+              <p className="text-center fw-bold">{doctor.name}</p>
             </div>
 
             {/* Options  */}
