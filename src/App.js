@@ -4,6 +4,7 @@ import DocterRegisteration from './components/DocterRegisteration';
 import Home from './components/Home';
 import NavBar from './components/NavBar';
 import DocumentState from './context/Document_State/DocumentState';
+import PatientState from './context/Patient_State/PatientState';
 import Form1 from './components/Form1';
 import Form2 from './components/Form2';
 import SignIn from './components/SignIn';
@@ -70,8 +71,10 @@ function App() {
   return (
     <>
       <DocumentState>
-        <NavBar />
-        <RouterProvider router={router} />
+        <PatientState>
+          <NavBar />
+          <RouterProvider router={router} />
+        </PatientState>
       </DocumentState>
       <ToastContainer
         position="top-center"
