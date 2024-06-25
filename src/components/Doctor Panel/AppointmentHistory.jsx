@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function AppointmentHistory() {
   const [appointment, setappointment] = useState([]);
@@ -26,6 +27,25 @@ export default function AppointmentHistory() {
 
     getAppointments();
   }, []);
+
+  async function deleteAppointment(id) {
+    try {
+      const response = await fetch(`http://localhost:8010/deletePatient/${id}`, {
+        method: "get",
+      });
+
+      if (response.ok) {
+        setappointment(appointment.filter((item) => item.appointmentNumber !== id));
+        toast("Appointment cancelled"); // Show toast only if deletion is successful
+      } else {
+        console.error("Appointment deletion failed"); // Handle potential errors
+      }
+    } catch (error) {
+      console.clear();
+      console.log(error);
+    }
+  }
+  
 
   return (
     <>
@@ -57,7 +77,7 @@ export default function AppointmentHistory() {
                     <button className="btn btn-outline-success badge-pill text-end me-3">
                       Open
                     </button>
-                    <button className="btn btn-outline-danger badge-pill text-end">
+                    <button className="btn btn-outline-danger badge-pill text-end" onClick={()=>deleteAppointment(item.appointmentNumber)}>
                       Delete
                     </button>
                   </td>
