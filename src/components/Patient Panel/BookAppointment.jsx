@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Appointment_Calender from "./Appointment_Calender";
 import { getUserData } from "../../IndexDB_Operation";
+import { toast } from "react-toastify";
 
 export default function BookAppointment() {
   const [specializations, setSpecializations] = useState([]);
@@ -93,7 +94,7 @@ export default function BookAppointment() {
             body:formData
         });
         if(response.ok){
-            alert("Successfully Registered");
+            toast("Successfully Registered");
         }
     } catch (error) {
         alert('Error occur');
