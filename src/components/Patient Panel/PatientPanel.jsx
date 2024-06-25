@@ -6,11 +6,7 @@ export default function PatientPanel() {
   const [patient, setpatient] = useState({})
   useEffect(async() => {
     const patientEmail = localStorage.getItem("Patient")
-    console.clear()
-    console.log(patientEmail)
     const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
-    console.log(result)
-    console.log("Type of result is ",typeof(result))
     setpatient(result)
   }, [])
   
