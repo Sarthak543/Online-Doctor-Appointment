@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 
-export default function Appointment_Calender() {
+export default function Appointment_Calender({Parent_date}) {
     const [appointments, setAppointments] = useState([
         {
           date: new Date(2024, 4, 13), // May 13, 2024 (month index starts at 0)
@@ -36,6 +36,7 @@ export default function Appointment_Calender() {
     const [date,setDate] = useState(new Date());
     const onChange = date =>{
         setDate(date);
+        Parent_date(date);
     }
 
       return (
