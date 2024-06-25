@@ -1,21 +1,70 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import moment from "moment";
+import { toast } from "react-toastify";
+import Appointment_Calender from "../Patient Panel/Appointment_Calender";
 
 export default function CheckAppointment() {
-  const backgroundStyle = {
-    position: "absolute",
-    backgroundImage: `url(../test1.jpg)`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    height: "100vh",
-    width: "100%",
-    maxWidth: "100vw",
-    overflowX: "hidden",
-    zIndex: "-1",
-  };
+  const [appointment, setappointment] = useState([]);
+  const modalRef = useRef(null);
+  const [date, setDate] = useState(new Date());
+  const [id, setid] = useState(0);
+
+  useEffect(() => {
+    async function getAppointments() {
+      try {
+        let a = "Rakesh Goyal";
+        const response = await fetch(
+          `http://localhost:8010/DoctorAppointment/${a}`,
+          {
+            method: "post",
+          }
+        );
+        /*
+        due to different time zones i got dates one day less than expected. So i use moment.js to convert that dates to this timezone
+        */ 
+        const data = await response.json();
+        const appointmentsWithAdjustedDates = data.map((appointment) => {
+          const adjustedDate = moment(appointment.date).local(); 
+          return { ...appointment, date: adjustedDate.format("YYYY-MM-DD") };
+        });
+
+        setappointment(appointmentsWithAdjustedDates);
+        // setappointment(data);
+      } catch (error) {
+        console.clear();
+        console.log(error);
+      }
+    }
+
+    getAppointments();
+  }, []);
+
+  function modal(id) {
+    modalRef.current.click();
+    setid(id);
+  }
+
+  async function updateAppointment() {
+    try {
+      const response = await fetch(
+        `http://localhost:8010/updateAppointment/${id}/${date}`,
+        {
+          method: "get",
+        }
+      );
+      if (response.ok) {
+        toast("Appointment Reschuduled");
+      } else {
+        toast("Internal error");
+      }
+    } catch (error) {
+      console.clear();
+      console.log(error);
+    }
+  }
+
   return (
     <>
-      <div style={backgroundStyle}></div>
       <div className="container d-flex justify-content-around align-items-center h-25">
         <div
           className="border rounded-4 h-75 w-25 d-flex"
@@ -47,8 +96,13 @@ export default function CheckAppointment() {
           </div>
           <div className="w-75 d-flex flex-column">
             <div className="mt-5">
-              <p className="text-center fw-medium ">Today Appointment: 29</p>
-              <p className="text-center fw-medium">2/05/2024</p>
+              <p className="text-center fw-medium ">
+                Today Appointment: {appointment.length}
+              </p>
+              <p className="text-center fw-medium">
+                {new Date().toLocaleDateString()}
+              </p>{" "}
+              {/* 2/05/2024 */}
             </div>
           </div>
         </div>
@@ -72,113 +126,101 @@ export default function CheckAppointment() {
           <table className="table table-hover transparent-table">
             <thead>
               <tr className="table-color">
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <th scope="col">SNO.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Appointment Date</th>
+                <th scope="col">Mobile</th>
                 <th scope="col text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger badge-pill text-end w-50">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end  me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger badge-pill w-50 text-end ">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger badge-pill w-50 text-end">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">5</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <th scope="row">7</th>
-                <td colspan="2">Larry the Bird</td>
-                <td>@twitter</td>
-                <td className="w-25">
-                  <button className="btn btn-outline-success badge-pill text-end me-3">
-                    Consult
-                  </button>
-                  <button className="btn btn-outline-danger w-50 badge-pill text-end">
-                    Reschedule
-                  </button>
-                </td>
-              </tr>
+              {appointment.map((item, index) => (
+                <tr>
+                  <th scope="row">{index + 1}</th>
+                  <td>{item.patientName}</td>
+                  <td>{item.date.substring(0, 10)}</td>
+                  <td>{item.patientNumber}</td>
+                  <td className="w-25">
+                    <button className="btn btn-outline-success badge-pill text-end me-3">
+                      Consult
+                    </button>
+                    <button
+                      className="btn btn-outline-danger badge-pill text-end w-50 text-center"
+                      onClick={() => modal(item.appointmentNumber)}
+                    >
+                      Reschedule
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-        <div className="d-flex justify-content-between" style={{marginBottom:'15vh'}}>
+        <div
+          className="d-flex justify-content-between"
+          style={{ marginBottom: "15vh" }}
+        >
           <button className="btn btn-primary m-2">Previous</button>
-          <button className="btn btn-primary m-2">Next</button>
+          <label htmlFor="Reschudule-modal" className="btn btn-primary m-2">
+            Next
+          </label>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        id="Reschudule-modal"
+        ref={modalRef}
+        style={{ display: "none" }}
+      >
+        Launch static backdrop modal
+      </button>
+
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Appointment Reschedule
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body mx-auto">
+              <Appointment_Calender Parent_date={setDate} />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-success"
+                onClick={updateAppointment}
+              >
+                Done
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
