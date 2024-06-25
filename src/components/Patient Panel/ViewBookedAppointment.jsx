@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ViewBookedAppointment() {
 
@@ -22,6 +23,25 @@ export default function ViewBookedAppointment() {
 
     getAppointments();
   }, []);
+
+
+  async function deleteAppointment(id) {
+    try {
+      const response = await fetch(`http://localhost:8010/deletePatient/${id}`, {
+        method: "get",
+      });
+
+      if (response.ok) {
+        setappointment(appointment.filter((item) => item.appointmentNumber !== id));
+        toast("Appointment cancelled"); // Show toast only if deletion is successful
+      } else {
+        console.error("Appointment deletion failed"); // Handle potential errors
+      }
+    } catch (error) {
+      console.clear();
+      console.log(error);
+    }
+  }
   
 
   return (
@@ -51,7 +71,7 @@ export default function ViewBookedAppointment() {
         <td>{item.date.substring(0,10)}</td>
         <td>{item.doctorNumber}</td>
         <td className="w-25">
-          <button className="btn btn-outline-danger badge-pill ms-5 w-50">
+          <button className="btn btn-outline-danger badge-pill ms-5 w-50" onClick={()=>deleteAppointment(item.appointmentNumber)}>
             Cancel
           </button>
         </td>
