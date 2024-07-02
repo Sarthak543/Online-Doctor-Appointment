@@ -21,6 +21,9 @@ import ViewBookedAppointment from './components/Patient Panel/ViewBookedAppointm
 import Appointment_Calender from './components/Patient Panel/Appointment_Calender';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ChatWindow from './components/Chat Panel/ChatWindow';
+import { WebSocketProvider } from './components/Chat Panel/WebSocketContext';
+import ShowChat from './components/Chat Panel/ShowChat';
 function App() {
   const router = createBrowserRouter([
     {
@@ -53,7 +56,9 @@ function App() {
       element: <DoctorPanel />,
       children: [
         { path: "/DoctorPanel/check-appointment", element: <CheckAppointment /> },
+        { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow /> },
         { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory /> },
+        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat/> },
         { path: "/DoctorPanel/feedback", element: <FeedBack /> }
       ]
     },
@@ -64,6 +69,7 @@ function App() {
         { path: "/PatientPanel/bookAppointment", element: <BookAppointment /> },
         { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory /> },
         { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment /> },
+        { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow/> },
         { path: "/PatientPanel/date", element: <Appointment_Calender /> }
       ]
     }
@@ -72,8 +78,10 @@ function App() {
     <>
       <DocumentState>
         <PatientState>
-          <NavBar />
-          <RouterProvider router={router} />
+          <WebSocketProvider>
+            <NavBar />
+            <RouterProvider router={router} />
+          </WebSocketProvider>
         </PatientState>
       </DocumentState>
       <ToastContainer
