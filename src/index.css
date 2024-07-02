@@ -16,3 +16,40 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.h-full{
+  height: 92.3vh;
+}
+
+.h-7{
+  height: 7vh;
+}
+
+.h-89{
+  height: 87vh;
+}
+
+.h-bottom{
+  height: 43px;
+}
+
+.chat-header-bg{
+  background-color: rgba(9,92,84,255)
+}
+
+.no-border{
+  border: 0;
+}
+
+.max-width-50{
+  max-width: 49%;
+  width: max-content;
+  /* float: left; */
+}
+
+.margin-left-50{
+  margin-left: auto;
+  max-width: 50%;
+  width: max-content;
+  /* float: right; */
+}
