@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function AppointmentHistory() {
   const [appointment, setappointment] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     async function getAppointments() {
       try {
@@ -45,6 +46,10 @@ export default function AppointmentHistory() {
       console.log(error);
     }
   }
+
+  const loadChatHistory = (appointmentNumber,patientName,doctorName)=>{
+    navigate("showChat",{state:{appointmentNumber,person:patientName,name:doctorName}})
+  }
   
 
   return (
@@ -74,7 +79,7 @@ export default function AppointmentHistory() {
                   <td>{item.date.substring(0,10)}</td>
                   <td>{item.patientNumber}</td>
                   <td className="w-25">
-                    <button className="btn btn-outline-success badge-pill text-end me-3">
+                    <button className="btn btn-outline-success badge-pill text-end me-3" onClick={()=>loadChatHistory(item.appointmentNumber,item.patientName,item.doctorName)}>
                       Open
                     </button>
                     <button className="btn btn-outline-danger badge-pill text-end" onClick={()=>deleteAppointment(item.appointmentNumber)}>
