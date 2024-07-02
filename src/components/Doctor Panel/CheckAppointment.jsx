@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Appointment_Calender from "../Patient Panel/Appointment_Calender";
+import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../Chat Panel/WebSocketContext";
+
 
 export default function CheckAppointment() {
   const [appointment, setappointment] = useState([]);
   const modalRef = useRef(null);
   const [date, setDate] = useState(new Date());
   const [id, setid] = useState(0);
+  const { connect } = useWebSocket();
+  let navigate = useNavigate();
+
 
   useEffect(() => {
     async function getAppointments() {
@@ -61,6 +67,11 @@ export default function CheckAppointment() {
       console.clear();
       console.log(error);
     }
+  }
+
+  async function Consult(item) {
+    await connect();
+    navigate("Consult",{state:{item,name:item.doctorName,heading:item.patientName}})
   }
 
   return (
@@ -141,7 +152,7 @@ export default function CheckAppointment() {
                   <td>{item.date.substring(0, 10)}</td>
                   <td>{item.patientNumber}</td>
                   <td className="w-25">
-                    <button className="btn btn-outline-success badge-pill text-end me-3">
+                    <button className="btn btn-outline-success badge-pill text-end me-3" onClick={()=>Consult(item)}>
                       Consult
                     </button>
                     <button
