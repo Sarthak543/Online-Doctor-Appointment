@@ -7,7 +7,7 @@ export default function DoctorPanel() {
 
   const [doctor, setdoctor] = useState({})
   useEffect(async() => {
-    const doctorEmail = localStorage.getItem("Doctor")
+    const doctorEmail = sessionStorage.getItem("user")
     const result = await getUserData(doctorEmail,"OnlineDoctorAppointment", "Doctor")
     setdoctor(result)
     console.clear()

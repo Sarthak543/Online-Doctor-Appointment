@@ -4,7 +4,6 @@ import documentContext from '../context/Document_State/DocumentContext'
 
 export default function Form1() {
     const {docData,setDocData} = useContext(documentContext);
-    const {signIn,setSignIn } = useContext(documentContext);
     const onChangeHandler = (e) => {
         setDocData({ ...docData, [e.target.name]: e.target.value })
     }

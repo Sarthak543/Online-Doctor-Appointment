@@ -27,7 +27,7 @@ export default function BookAppointment() {
     }
 
     async function getUserDetail(){
-      const patientEmail = localStorage.getItem("Patient")
+      const patientEmail = sessionStorage.getItem("user")
       const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
       setpatient(result)
     }

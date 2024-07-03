@@ -5,7 +5,7 @@ import { getUserData } from "../../IndexDB_Operation";
 export default function PatientPanel() {
   const [patient, setpatient] = useState({})
   useEffect(async() => {
-    const patientEmail = localStorage.getItem("Patient")
+    const patientEmail = sessionStorage.getItem("user")
     const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
     setpatient(result)
   }, [])
