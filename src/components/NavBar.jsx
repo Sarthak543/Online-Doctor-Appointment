@@ -1,6 +1,11 @@
-import React from "react";
+import React,{useContext} from "react";
 
 export default function NavBar() {
+  
+  function click() {
+    console.log(sessionStorage.getItem("userType"))
+  }
+  
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light bg-transparent shadow-sm">
@@ -53,20 +58,11 @@ export default function NavBar() {
             </div>
           </div>
           <div className="container w-25">
-            <form class="d-flex" role="search">
-              <input
-                class="form-control me-2 w-75"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button class="btn btn-outline-success " type="submit">
-                Search
-              </button>
-            </form>
+            <button className="btn" onClick={click}>abc</button>
           </div>
         </div>
       </nav>
     </>
   );
 }
+
