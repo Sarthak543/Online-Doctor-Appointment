@@ -1,16 +1,22 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { getUserData } from "../../IndexDB_Operation";
 
 export default function PatientPanel() {
-  const [patient, setpatient] = useState({})
-  useEffect(async() => {
-    const patientEmail = sessionStorage.getItem("user")
-    const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
-    setpatient(result)
-  }, [])
-  
-  
+  const [patient, setpatient] = useState({});
+  useEffect(() => {
+    async function fetchedUserData() {
+      const patientEmail = sessionStorage.getItem("user");
+      const result = await getUserData(
+        patientEmail,
+        "OnlineDoctorAppointment",
+        "Patient"
+      );
+      setpatient(result);
+    }
+    fetchedUserData();
+  }, []);
+
   return (
     <>
       <div className="d-flex" style={{ height: "100vh" }}>
@@ -22,7 +28,7 @@ export default function PatientPanel() {
                 className="border border-dark rounded-circle"
                 id="dp"
                 style={{ width: "30%", height: "20vh" }}
-                src={`data:image/jpeg;base64,${patient.image}`} 
+                src={`data:image/jpeg;base64,${patient.image}`}
                 alt="Description"
               />
             </div>

@@ -6,12 +6,16 @@ import { getUserData } from "../../IndexDB_Operation";
 export default function DoctorPanel() {
 
   const [doctor, setdoctor] = useState({})
-  useEffect(async() => {
-    const doctorEmail = sessionStorage.getItem("user")
-    const result = await getUserData(doctorEmail,"OnlineDoctorAppointment", "Doctor")
-    setdoctor(result)
-    console.clear()
-    console.log(result)
+  useEffect(() => {
+    async function fetchingUserData() {
+      const doctorEmail = sessionStorage.getItem("user")
+      const result = await getUserData(doctorEmail,"OnlineDoctorAppointment", "Doctor")
+      setdoctor(result)
+      console.clear()
+      console.log(result)
+    }
+    fetchingUserData();
+
   }, [])
   
 
