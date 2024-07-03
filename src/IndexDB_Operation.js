@@ -23,21 +23,35 @@ export const openDatabase = (DB_NAME) => {
   });
 };
 
-export const addUserData = async (data,DB_NAME,STORE_NAME) => {
+export const addUserData = async (data, email, DB_NAME, STORE_NAME) => {
   const db = await openDatabase(DB_NAME);
   const tx = db.transaction(STORE_NAME, 'readwrite');
   const store = tx.objectStore(STORE_NAME);
 
   return new Promise((resolve, reject) => {
-    const request = store.add(data);
+    const request = store.get(email); // Check if key exists
     request.onsuccess = (event) => {
-      resolve(); // Successful addition
+      const existingData = event.target.result;
+      if (!existingData) {
+        // Key does not exist, proceed with adding data
+        const addRequest = store.add(data);
+        addRequest.onsuccess = () => {
+          resolve(); // Successful addition
+        };
+        addRequest.onerror = (errorEvent) => {
+          reject(errorEvent.target.error); // Handle errors
+        };
+      } else {
+        // Key already exists, skip adding data
+        resolve(); // No action needed
+      }
     };
-    request.onerror = (event) => {
-      reject(event.target.error); // Handle errors
+    request.onerror = (errorEvent) => {
+      reject(errorEvent.target.error); // Handle errors
     };
   });
 };
+
 
 export const getUserData = async (email,DB_NAME,STORE_NAME) => {
   const db = await openDatabase(DB_NAME);
