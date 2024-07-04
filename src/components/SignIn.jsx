@@ -49,10 +49,12 @@ export default function SignIn() {
           await addUserData(data,data.eMail ,"OnlineDoctorAppointment", "Patient");
           // Saving the email to the session storage so that we can retrieve data from indexDB later
           sessionStorage.setItem("user",email)
+          sessionStorage.setItem("userType","Patient")
           navigate("/PatientPanel");
         } else {
           await addUserData(data, data.email, "OnlineDoctorAppointment", "Doctor");
           sessionStorage.setItem("user",email)
+          sessionStorage.setItem("userType","Doctor")
           navigate("/DoctorPanel");
         }
       }

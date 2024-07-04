@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { getUserData } from "../../IndexDB_Operation";
+import documentContext from '../../context/Document_State/DocumentContext'
 
 export default function PatientPanel() {
   const [patient, setpatient] = useState({});
+  const { setisUserLogIn } = useContext(documentContext);
+
   useEffect(() => {
     async function fetchedUserData() {
       const patientEmail = sessionStorage.getItem("user");
@@ -13,6 +16,7 @@ export default function PatientPanel() {
         "Patient"
       );
       setpatient(result);
+      setisUserLogIn(true);
     }
     fetchedUserData();
   }, []);
