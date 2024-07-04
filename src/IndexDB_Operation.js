@@ -74,3 +74,21 @@ export const getUserData = async (email,DB_NAME,STORE_NAME) => {
   });
 };
 
+export const deleteData = async(email,DB_NAME,STORE_NAME)=>{
+  const db = await openDatabase(DB_NAME);
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  const store = tx.objectStore(STORE_NAME);
+
+  const request = store.delete(email);
+
+  return new Promise((resolve, reject) => {
+    // const request = store.get(email); // Get data by email (key)
+    request.onsuccess = (event) => {
+      resolve("Data deleted"); // Resolve with retrieved data
+    };
+    request.onerror = (event) => {
+      reject(event.target.error); // Handle errors
+    };
+  });
+};
+
