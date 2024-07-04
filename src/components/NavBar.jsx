@@ -1,11 +1,30 @@
-import React,{useContext} from "react";
+import React, { useContext, useEffect } from "react";
+import documentContext from "../context/Document_State/DocumentContext";
+import { deleteData } from "../IndexDB_Operation";
 
 export default function NavBar() {
-  
+  const { isUserLogIn, setisUserLogIn } = useContext(documentContext);
   function click() {
-    console.log(sessionStorage.getItem("userType"))
+    setisUserLogIn(false);
+    let STORE_NAME = (sessionStorage.getItem("userType")==='Patient'?'Patient':'Doctor')
+    deleteData(
+      sessionStorage.getItem("user"),
+      "OnlineDoctorAppointment",
+      STORE_NAME
+    );
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("userType");
+    window.location.href = "/";
   }
-  
+
+  useEffect(() => {
+    if (isUserLogIn) {
+      document.getElementById("logout").classList.remove("d-none");
+    } else {
+      document.getElementById("logout").classList.add("d-none");
+    }
+  }, [isUserLogIn]);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light bg-transparent shadow-sm">
@@ -58,11 +77,12 @@ export default function NavBar() {
             </div>
           </div>
           <div className="container w-25">
-            <button className="btn" onClick={click}>abc</button>
+            <button id="logout" className="btn d-none ms-5" onClick={click}>
+              Logout
+            </button>
           </div>
         </div>
       </nav>
     </>
   );
 }
-

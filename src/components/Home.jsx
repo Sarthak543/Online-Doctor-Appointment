@@ -4,10 +4,17 @@ import { Link } from "react-router-dom";
 
 export default function Home() {
   const a = useContext(documentContext);
-  const { signIn, setSignIn } = a;
+  const { signIn, setSignIn, setisUserLogIn } = a;
 
   useEffect(() => {
-    console.log("Default value is set to : ", signIn);
+    console.log(sessionStorage.getItem("user"));
+
+
+    // this will reomve the user details from the session storage if user go back from patient/doctor panel
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('userType');
+    setisUserLogIn(false);
+
   }, []);
 
   const signInHandler = async (event) => {
