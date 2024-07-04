@@ -38,11 +38,12 @@ const DocumentState= ({children})=>{
 
 
     const [signIn,setSignIn] = useState("")
+    const [isUserLogIn, setisUserLogIn] = useState(false)
 
 
 
 return (
-    <DocumentContext.Provider value = {{bg,setbg,docData,setDocData,patData,setPatData,signIn,setSignIn}}>
+    <DocumentContext.Provider value = {{bg,setbg,docData,setDocData,patData,setPatData,signIn,setSignIn,isUserLogIn, setisUserLogIn}}>
         {children}
     </DocumentContext.Provider>
 )
