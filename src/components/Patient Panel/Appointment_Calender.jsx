@@ -1,50 +1,65 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
+import "react-calendar/dist/Calendar.css";
 
-export default function Appointment_Calender({Parent_date}) {
-    const [appointments, setAppointments] = useState([
-        {
-          date: new Date(2024, 4, 13), // May 13, 2024 (month index starts at 0)
-          time: "10:00 AM",
-          patient: "John Doe",
-          doctor: "Dr. Smith",
-        },
-        {
-          date: new Date(2024, 4, 15), // May 15, 2024
-          time: "2:00 PM",
-          patient: "Jane Smith",
-          doctor: "Dr. Jones",
-        },
-      ]);
+export default function Appointment_Calender({ Parent_date, busyDates }) {
+  const [appointments, setAppointments] = useState([]);
+  const [date, setDate] = useState(new Date());
 
-      const isBooked = (date) => {
-        return appointments.some((appointment) => {
-          const appointmentDate = new Date(appointment.date); // Create a Date object
-          return (
-            appointmentDate.getFullYear() === date.getFullYear() &&
-            appointmentDate.getMonth() === date.getMonth() &&
-            appointmentDate.getDate() === date.getDate()
-          );
-        });
-      };
-    
-      const tileClassName = ({ date }) => {
-        return isBooked(date) ? "booked" : "available";
-      };
+  useEffect(() => {
+    if (busyDates) {
+      // converting these string dates to date obj for comparision
+      const typeCastedBusyDates = busyDates.map((dateStr) => new Date(dateStr));
 
-    const [date,setDate] = useState(new Date());
-    const onChange = date =>{
-        setDate(date);
-        Parent_date(date);
+      setAppointments(typeCastedBusyDates);
     }
+  }, [busyDates]);
 
-      return (
-        <>
-        <div>
-        <Calendar tileClassName={tileClassName} onChange={onChange} value={date}/>
-        </div>
-        </>
-      );
+  const isBooked = (date) => {
+    if (appointments === null) {
+      return false;
+    } else {
+      return appointments.some((appointment) => {
+        return (
+          appointment.getFullYear() === date.getFullYear() &&
+          appointment.getMonth() === date.getMonth() &&
+          appointment.getDate() === date.getDate()
+        );
+      });
     }
-    
+  };
+
+  const tileClassName = ({ date }) => {
+    return isBooked(date) ? "booked" : "available";
+  };
+
+  const onChange = (date) => {
+    setDate(date);
+    Parent_date(date);
+  };
+
+  const getFifteenDaysFromToday = () => {
+    const todayCopy = new Date();
+    return new Date(todayCopy.setDate(todayCopy.getDate() + 15));
+  };
+
+  const customDisableDate = (date) => {
+    const isBookedDate = isBooked(date.date);
+    return isBookedDate;
+  };
+
+  return (
+    <>
+      <div>
+        <Calendar
+          tileClassName={tileClassName}
+          tileDisabled={customDisableDate}
+          onChange={onChange}
+          value={date}
+          minDate={new Date()}
+          maxDate={getFifteenDaysFromToday()}
+        />
+      </div>
+    </>
+  );
+}
