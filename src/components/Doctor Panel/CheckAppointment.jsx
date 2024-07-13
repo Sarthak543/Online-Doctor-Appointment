@@ -1,49 +1,40 @@
 import React, { useEffect, useRef, useState } from "react";
-import moment from "moment";
 import { toast } from "react-toastify";
 import Appointment_Calender from "../Patient Panel/Appointment_Calender";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../Chat Panel/WebSocketContext";
 
-
 export default function CheckAppointment() {
   const [appointment, setappointment] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
   const modalRef = useRef(null);
   const [date, setDate] = useState(new Date());
   const [id, setid] = useState(0);
   const { connect } = useWebSocket();
   let navigate = useNavigate();
 
-
   useEffect(() => {
     async function getAppointments() {
       try {
-        let a = "Rakesh Goyal";
+        let name = sessionStorage.getItem("userName");
         const response = await fetch(
-          `http://localhost:8010/DoctorAppointment/${a}`,
+          `http://localhost:8010/DoctorAppointment/${name}?pageNumber=${pageNumber}`,
           {
             method: "post",
           }
         );
-        /*
-        due to different time zones i got dates one day less than expected. So i use moment.js to convert that dates to this timezone
-        */ 
         const data = await response.json();
-        const appointmentsWithAdjustedDates = data.map((appointment) => {
-          const adjustedDate = moment(appointment.date).local(); 
-          return { ...appointment, date: adjustedDate.format("YYYY-MM-DD") };
-        });
 
-        setappointment(appointmentsWithAdjustedDates);
+        setappointment(data);
         // setappointment(data);
       } catch (error) {
-        console.clear();
+        // console.clear();
         console.log(error);
       }
     }
 
     getAppointments();
-  }, []);
+  }, [pageNumber]);
 
   function modal(id) {
     modalRef.current.click();
@@ -64,14 +55,39 @@ export default function CheckAppointment() {
         toast("Internal error");
       }
     } catch (error) {
-      console.clear();
+      // console.clear();
       console.log(error);
     }
   }
 
   async function Consult(item) {
     await connect();
-    navigate("Consult",{state:{item,name:item.doctorName,heading:item.patientName}})
+    navigate("Consult", {
+      state: { item, name: item.doctorName, heading: item.patientName },
+    });
+  }
+
+  function isConsultButtonDisabled(appointment) {
+    console.log("\n" + appointment.patientName);
+    // Get current time in milliseconds
+    const currentTime = new Date().getTime();
+    console.log(new Date() + "     " + currentTime);
+
+    // Extract appointment time (hours and minutes)
+    const appointmentDate = new Date(appointment.date);
+    console.log("\n" + appointmentDate + "   ");
+    const appointmentTime = appointmentDate.getTime();
+    console.log(appointmentTime);
+
+    // Calculate the end of the two-minute window after the appointment time
+    const twoMinutesAfterAppointment = appointmentTime + 2 * 60 * 1000;
+    console.log(twoMinutesAfterAppointment);
+
+    // Compare current time with the two-minute window
+    return !(
+      currentTime >= appointmentTime &&
+      currentTime <= twoMinutesAfterAppointment
+    );
   }
 
   return (
@@ -152,7 +168,11 @@ export default function CheckAppointment() {
                   <td>{item.date.substring(0, 10)}</td>
                   <td>{item.patientNumber}</td>
                   <td className="w-25">
-                    <button className="btn btn-outline-success badge-pill text-end me-3" onClick={()=>Consult(item)}>
+                    <button
+                      className="btn btn-outline-success badge-pill text-end me-3"
+                      disabled={isConsultButtonDisabled(item)}
+                      onClick={() => Consult(item)}
+                    >
                       Consult
                     </button>
                     <button
@@ -171,10 +191,24 @@ export default function CheckAppointment() {
           className="d-flex justify-content-between"
           style={{ marginBottom: "15vh" }}
         >
-          <button className="btn btn-primary m-2">Previous</button>
-          <label htmlFor="Reschudule-modal" className="btn btn-primary m-2">
+          <button
+            className="btn btn-primary m-2"
+            onClick={() => {
+              setPageNumber(pageNumber - 1);
+            }}
+            disabled={pageNumber === 1}
+          >
+            Previous
+          </button>
+          <button
+            className="btn btn-primary m-2"
+            onClick={() => {
+              setPageNumber(pageNumber + 1);
+            }}
+            disabled={appointment.length < 7 || appointment.length === 0}
+          >
             Next
-          </label>
+          </button>
         </div>
       </div>
 
