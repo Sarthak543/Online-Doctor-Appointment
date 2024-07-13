@@ -10,8 +10,8 @@ export default function BookAppointment() {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [date, setDate] = useState(new Date());
   const [Problem, setProblem] = useState("");
-  const [patient, setpatient] = useState({})
-
+  const [patient, setpatient] = useState({});
+  const [busyDates, setbusyDates] = useState(null);
 
   useEffect(() => {
     async function getspecialization() {
@@ -26,10 +26,14 @@ export default function BookAppointment() {
       }
     }
 
-    async function getUserDetail(){
-      const patientEmail = sessionStorage.getItem("user")
-      const result = await getUserData(patientEmail,"OnlineDoctorAppointment", "Patient")
-      setpatient(result)
+    async function getUserDetail() {
+      const patientEmail = sessionStorage.getItem("user");
+      const result = await getUserData(
+        patientEmail,
+        "OnlineDoctorAppointment",
+        "Patient"
+      );
+      setpatient(result);
     }
     try {
       getspecialization();
@@ -38,8 +42,6 @@ export default function BookAppointment() {
       console.log(error);
     }
   }, []);
-
-
 
   useEffect(() => {
     async function getDocName() {
@@ -53,7 +55,7 @@ export default function BookAppointment() {
         const fetchedData23 = await response.json();
         setDoctors(fetchedData23);
       } catch (error) {
-        console.clear();
+        // console.clear();
         console.log(error);
       }
     }
@@ -61,56 +63,55 @@ export default function BookAppointment() {
     try {
       getDocName();
     } catch (error) {
-      console.clear();
+      // console.clear();
       console.log(error);
     }
   }, [selectedSpecialization]);
 
+  useEffect(() => {
+    if (selectedDoctor) {
+      async function getBusyDates(docName) {
+        const response = await fetch(
+          `http://localhost:8010/getBusyDate/${docName}`,
+          {
+            method: "get",
+          }
+        );
+        const data = await response.json();
+        setbusyDates(data);
+        console.log(data + "DoctorName:  " + selectedDoctor);
+      }
 
+      getBusyDates(selectedDoctor);
+    }
+  }, [selectedDoctor]);
 
-
-
-
-
-
-
-
-  const handleSubmit= async(event)=>{
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
 
     //appending all the data from patData to formData
-    formData.append('specialization',selectedSpecialization)
-    formData.append('DoctorName',selectedDoctor)
-    formData.append('date',date)
-    formData.append('problem',Problem)
-    formData.append('patientName',patient.name)
-    formData.append('pNumber',patient.mob)
+    formData.append("specialization", selectedSpecialization);
+    formData.append("DoctorName", selectedDoctor);
+    formData.append("date", date);
+    formData.append("problem", Problem);
+    formData.append("patientName", patient.name);
+    formData.append("pNumber", patient.mob);
 
     // API call
     try {
-        const response = await fetch('http://localhost:8010/saveAppointment',{
-            method:'post',
-            body:formData
-        });
-        if(response.ok){
-            toast("Successfully Registered");
-        }
+      const response = await fetch("http://localhost:8010/saveAppointment", {
+        method: "post",
+        body: formData,
+      });
+      if (response.ok) {
+        toast("Successfully Registered");
+      }
     } catch (error) {
-        alert('Error occur');
-        console.error(error);
+      alert("Error occur");
+      console.error(error);
     }
-};
-
-
-
-
-
-
-
-
-
-
+  };
 
   return (
     <>
@@ -164,16 +165,18 @@ export default function BookAppointment() {
           </div>
           <hr />
           <div className=" container w-50 mx-auto">
-            <Appointment_Calender Parent_date = {setDate} />
+            <Appointment_Calender Parent_date={setDate} busyDates={busyDates} />
           </div>
           <div className="container mt-4">
             <textarea
               class="form-control"
               rows="3"
               placeholder="Describe your problem"
-              value = {Problem}
-              onChange={e=>{setProblem(e.target.value); console.log(e.target.value)}}
-
+              value={Problem}
+              onChange={(e) => {
+                setProblem(e.target.value);
+                console.log(e.target.value);
+              }}
             ></textarea>
           </div>
           <div className="row my-4">
