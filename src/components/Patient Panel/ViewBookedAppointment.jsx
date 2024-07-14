@@ -1,34 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { getUserData } from "../../IndexDB_Operation";
 import { useWebSocket } from "../Chat Panel/WebSocketContext";
 
 export default function ViewBookedAppointment() {
   const [appointment, setappointment] = useState([]);
-  const [patient, setpatient] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
   const { connect } = useWebSocket();
   let navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchedUserData() {
-      const patientEmail = sessionStorage.getItem("user");
-      const result = await getUserData(
-        patientEmail,
-        "OnlineDoctorAppointment",
-        "Patient"
-      );
-      setpatient(result);
-    }
-    fetchedUserData();
-  }, []);
-
-  useEffect(() => {
     async function getAppointments() {
       try {
-        console.log(patient);
-        const userName = patient.name;
+        const userName = sessionStorage.getItem("userName");
         const response = await fetch(
           `http://localhost:8010/PatientAppointment/${userName}?pageNumber=${pageNumber}`,
           {
@@ -45,7 +29,7 @@ export default function ViewBookedAppointment() {
     }
 
     getAppointments();
-  }, [patient, pageNumber]);
+  }, [pageNumber]);
 
   async function deleteAppointment(id) {
     try {

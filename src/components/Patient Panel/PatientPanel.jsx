@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { getUserData } from "../../IndexDB_Operation";
-import documentContext from '../../context/Document_State/DocumentContext'
+import documentContext from "../../context/Document_State/DocumentContext";
 
 export default function PatientPanel() {
   const [patient, setpatient] = useState({});
@@ -10,13 +9,13 @@ export default function PatientPanel() {
   useEffect(() => {
     async function fetchedUserData() {
       const patientEmail = sessionStorage.getItem("user");
-      const result = await getUserData(
-        patientEmail,
-        "OnlineDoctorAppointment",
-        "Patient"
+      const response = await fetch(
+        `http://localhost:8010/PatientDetail?email=${patientEmail}`,
+        { method: "post" }
       );
-      setpatient(result);
-      setisUserLogIn(true);
+      const data = await response.json();
+      setpatient(data);
+      setisUserLogIn(true); // imp
     }
     fetchedUserData();
   }, []);
@@ -36,7 +35,9 @@ export default function PatientPanel() {
                 alt="Description"
               />
             </div>
-            <p className="text-center fw-bold">{patient.name}</p>
+            <p className="text-center fw-bold">
+              {sessionStorage.getItem("userName")}
+            </p>
           </div>
 
           {/* Options  */}

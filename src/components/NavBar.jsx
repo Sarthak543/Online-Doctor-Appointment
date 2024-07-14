@@ -1,18 +1,13 @@
 import React, { useContext, useEffect } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
-import { deleteData } from "../IndexDB_Operation";
 
 export default function NavBar() {
   const { isUserLogIn, setisUserLogIn } = useContext(documentContext);
   function click() {
     setisUserLogIn(false);
-    let STORE_NAME = (sessionStorage.getItem("userType")==='Patient'?'Patient':'Doctor')
-    deleteData(
-      sessionStorage.getItem("user"),
-      "OnlineDoctorAppointment",
-      STORE_NAME
-    );
     sessionStorage.removeItem("user");
+    sessionStorage.removeItem("userName");
+    sessionStorage.removeItem("mob");
     sessionStorage.removeItem("userType");
     window.location.href = "/";
   }

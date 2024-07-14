@@ -1,28 +1,26 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { getUserData } from "../../IndexDB_Operation";
 import documentContext from "../../context/Document_State/DocumentContext";
 
-
 export default function DoctorPanel() {
-
-  const [doctor, setdoctor] = useState({})
-  const {setisUserLogIn } = useContext(documentContext);
+  const [doctor, setdoctor] = useState({});
+  const { setisUserLogIn } = useContext(documentContext);
 
   useEffect(() => {
-    async function fetchingUserData() {
-      const doctorEmail = sessionStorage.getItem("user")
-      const result = await getUserData(doctorEmail,"OnlineDoctorAppointment", "Doctor")
-      setdoctor(result)
-      console.clear()
-      console.log(result)
+    async function fetchedDoctorData() {
+      const doctorEmail = sessionStorage.getItem("user");
+      const response = await fetch(
+        `http://localhost:8010/DoctorDetail?email=${doctorEmail}`,
+        { method: "post" }
+      );
+      const data = await response.json();
+      setdoctor(data);
+      setisUserLogIn(true); // imp
     }
-    fetchingUserData();
-    setisUserLogIn(true);    
-  }, [])
-  
-
+    fetchedDoctorData();
+    setisUserLogIn(true);
+  }, []);
 
   return (
     <>
@@ -41,7 +39,7 @@ export default function DoctorPanel() {
                 <img
                   className="border border-dark rounded-circle"
                   style={{ width: "30%", height: "20vh" }}
-                  src={`data:image/jpeg;base64,${doctor.profilePhoto}`} 
+                  src={`data:image/jpeg;base64,${doctor.profilePhoto}`}
                   alt=""
                 />
               </div>
@@ -97,7 +95,10 @@ export default function DoctorPanel() {
             </Link>
             {/*  */}
           </div>
-          <div className="w-75" style={{ overflow: "auto", background: 'rgb(240, 239, 238)' }}>
+          <div
+            className="w-75"
+            style={{ overflow: "auto", background: "rgb(240, 239, 238)" }}
+          >
             <Outlet />
           </div>
         </div>

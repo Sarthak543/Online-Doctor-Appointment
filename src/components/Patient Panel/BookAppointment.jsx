@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Appointment_Calender from "./Appointment_Calender";
-import { getUserData } from "../../IndexDB_Operation";
 import { toast } from "react-toastify";
 
 export default function BookAppointment() {
@@ -10,7 +9,6 @@ export default function BookAppointment() {
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [date, setDate] = useState(new Date());
   const [Problem, setProblem] = useState("");
-  const [patient, setpatient] = useState({});
   const [busyDates, setbusyDates] = useState(null);
 
   useEffect(() => {
@@ -25,19 +23,8 @@ export default function BookAppointment() {
         console.log(error);
       }
     }
-
-    async function getUserDetail() {
-      const patientEmail = sessionStorage.getItem("user");
-      const result = await getUserData(
-        patientEmail,
-        "OnlineDoctorAppointment",
-        "Patient"
-      );
-      setpatient(result);
-    }
     try {
       getspecialization();
-      getUserDetail();
     } catch (error) {
       console.log(error);
     }
@@ -95,8 +82,8 @@ export default function BookAppointment() {
     formData.append("DoctorName", selectedDoctor);
     formData.append("date", date);
     formData.append("problem", Problem);
-    formData.append("patientName", patient.name);
-    formData.append("pNumber", patient.mob);
+    formData.append("patientName", sessionStorage.getItem("userName"));
+    formData.append("pNumber", sessionStorage.getItem("mob"));
 
     // API call
     try {

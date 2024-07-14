@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
-import { addUserData } from "../IndexDB_Operation";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -45,27 +44,15 @@ export default function SignIn() {
         console.log(data);
 
         if (signIn === "patient") {
-          // Saving data to indexedDB
-          await addUserData(
-            data,
-            data.eMail,
-            "OnlineDoctorAppointment",
-            "Patient"
-          );
-          // Saving the email to the session storage so that we can retrieve data from indexDB later
           sessionStorage.setItem("user", email);
           sessionStorage.setItem("userName", data.name);
+          sessionStorage.setItem("mob", data.mob);
           sessionStorage.setItem("userType", "Patient");
           navigate("/PatientPanel");
         } else {
-          await addUserData(
-            data,
-            data.email,
-            "OnlineDoctorAppointment",
-            "Doctor"
-          );
           sessionStorage.setItem("user", email);
           sessionStorage.setItem("userName", data.name);
+          sessionStorage.setItem("mob", data.mobile);
           sessionStorage.setItem("userType", "Doctor");
           navigate("/DoctorPanel");
         }

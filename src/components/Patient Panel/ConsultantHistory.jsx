@@ -1,28 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { getUserData } from "../../IndexDB_Operation";
 
 export default function ConsultantHistory() {
   const [appointment, setappointment] = useState([]);
-  const [patient, setpatient] = useState({});
   const [pageNumber, setPageNumber] = useState(1);
-
-  useEffect(() => {
-    async function fetchedUserData() {
-      const patientEmail = sessionStorage.getItem("user");
-      const result = await getUserData(
-        patientEmail,
-        "OnlineDoctorAppointment",
-        "Patient"
-      );
-      setpatient(result);
-    }
-    fetchedUserData();
-  }, []);
 
   useEffect(() => {
     async function getAppointments() {
       try {
-        const userName = patient.name;
+        const userName = sessionStorage.getItem("userName");
         const response = await fetch(
           `http://localhost:8010/PatientAppointment/${userName}?pageNumber=${pageNumber}`,
           {
@@ -39,7 +24,7 @@ export default function ConsultantHistory() {
       }
     }
     getAppointments();
-  }, [patient, pageNumber]);
+  }, [pageNumber]);
 
   return (
     <>
