@@ -58,7 +58,7 @@ function App() {
         { path: "/DoctorPanel/check-appointment", element: <CheckAppointment /> },
         { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow /> },
         { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory /> },
-        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat/> },
+        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat /> },
         { path: "/DoctorPanel/feedback", element: <FeedBack /> }
       ]
     },
@@ -68,8 +68,9 @@ function App() {
       children: [
         { path: "/PatientPanel/bookAppointment", element: <BookAppointment /> },
         { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory /> },
+        { path: "/PatientPanel/ConsultantHistory/showChat", element: <ShowChat /> },
         { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment /> },
-        { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow/> },
+        { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow /> },
         { path: "/PatientPanel/date", element: <Appointment_Calender /> }
       ]
     }
