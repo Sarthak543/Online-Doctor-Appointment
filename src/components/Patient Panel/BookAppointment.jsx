@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Appointment_Calender from "./Appointment_Calender";
 import { toast } from "react-toastify";
+import useRazorpay from "react-razorpay";
 
 export default function BookAppointment() {
   const [specializations, setSpecializations] = useState([]);
@@ -10,6 +11,7 @@ export default function BookAppointment() {
   const [date, setDate] = useState(new Date());
   const [Problem, setProblem] = useState("");
   const [busyDates, setbusyDates] = useState(null);
+  const [Razorpay] = useRazorpay();
 
   useEffect(() => {
     async function getspecialization() {
@@ -73,8 +75,75 @@ export default function BookAppointment() {
     }
   }, [selectedDoctor]);
 
-  const handleSubmit = async (event) => {
+  const initialize_payment = async (event) => {
     event.preventDefault();
+    let appointmentFee = 1;
+
+    try {
+      fetch("http://localhost:8010/createOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: appointmentFee }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.status == "created") {
+            // open payment form
+            let options = {
+              key: "rzp_test_1L0eX7RuYr9ZH3",
+              amount: data.amount,
+              currency: "INR",
+              name: "Online Doctor Appointment",
+              description: "Appointment fee for doctor appointment",
+              image:
+                "https://img.icons8.com/?size=100&id=A8QJYdwE1n8h&format=png&color=000000",
+              order_id: data.id,
+              handler: function (response) {
+                console.log(response.razor_payment_id);
+                console.log(response.razor_order_id);
+                console.log(response.razorpay_signature);
+                console.log("Payment successfull");
+                toast("Payment Successfull");
+                save_appointment_to_DB();
+              },
+              prefill: {
+                name: "",
+                email: "",
+                contact: "",
+              },
+              notes: {
+                address: "Online Doctor Appointment",
+              },
+              theme: {
+                color: "#3399cc",
+              },
+            };
+            let rzp = new Razorpay(options);
+            rzp.on("payment.failed", function (response) {
+              console.log(response.error.code);
+              console.log(response.error.description);
+              console.log(response.error.source);
+              console.log(response.error.step);
+              console.log(response.error.reason);
+              console.log(response.error.metadata.order_id);
+              console.log(response.error.metadata.payment_id);
+              toast("Payment Failed");
+            });
+            rzp.open();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const save_appointment_to_DB = async () => {
     const formData = new FormData();
 
     //appending all the data from patData to formData
@@ -104,7 +173,12 @@ export default function BookAppointment() {
     <>
       <h1 className="text-center">Book an appointment</h1>
       <div className="container w-50 border border-danger">
-        <form action="" method="get" className="mt-5" onSubmit={handleSubmit}>
+        <form
+          action=""
+          method="get"
+          className="mt-5"
+          onSubmit={initialize_payment}
+        >
           <div className="row ms-2 fs-6 fw-bold">Doctors details</div>
           <hr />
 
