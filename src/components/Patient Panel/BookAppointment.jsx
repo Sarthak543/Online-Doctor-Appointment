@@ -77,6 +77,7 @@ export default function BookAppointment() {
 
   const initialize_payment = async (event) => {
     event.preventDefault();
+    save_appointment_data_to_sessionStorage();
     let appointmentFee = 1;
 
     try {
@@ -108,6 +109,7 @@ export default function BookAppointment() {
                 console.log("Payment successfull");
                 toast("Payment Successfull");
                 save_appointment_to_DB();
+                // sessionStorage.removeItem("appointmentData");
               },
               prefill: {
                 name: "",
@@ -131,6 +133,7 @@ export default function BookAppointment() {
               console.log(response.error.metadata.order_id);
               console.log(response.error.metadata.payment_id);
               toast("Payment Failed");
+              sessionStorage.removeItem("appointmentData");
             });
             rzp.open();
           }
@@ -145,15 +148,23 @@ export default function BookAppointment() {
 
   const save_appointment_to_DB = async () => {
     const formData = new FormData();
+    const storedAppointmentData = JSON.parse(
+      sessionStorage.getItem("appointmentData")
+    );
 
     //appending all the data from patData to formData
-    formData.append("specialization", selectedSpecialization);
-    formData.append("DoctorName", selectedDoctor);
-    formData.append("date", date);
-    formData.append("problem", Problem);
+    formData.append(
+      "specialization",
+      storedAppointmentData.selectedSpecialization
+    );
+    formData.append("DoctorName", storedAppointmentData.DoctorName);
+    formData.append("date", new Date(storedAppointmentData.date));
+    formData.append("problem", storedAppointmentData.problem);
     formData.append("patientName", sessionStorage.getItem("userName"));
     formData.append("pNumber", sessionStorage.getItem("mob"));
 
+    console.clear();
+    console.log(storedAppointmentData.selectedDoctor);
     // API call
     try {
       const response = await fetch("http://localhost:8010/saveAppointment", {
@@ -167,6 +178,17 @@ export default function BookAppointment() {
       alert("Error occur");
       console.error(error);
     }
+  };
+
+  const save_appointment_data_to_sessionStorage = () => {
+    let appointmentData = {
+      specialization: selectedSpecialization,
+      DoctorName: selectedDoctor,
+      date: date,
+      problem: Problem,
+    };
+
+    sessionStorage.setItem("appointmentData", JSON.stringify(appointmentData));
   };
 
   return (
