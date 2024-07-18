@@ -61,6 +61,14 @@ export default function ViewBookedAppointment() {
     });
   }
 
+  function isCancel(appointment) {
+    const today = new Date();
+    const twoDaysAhead = new Date(today);
+    twoDaysAhead.setDate(today.getDate() + 2);
+    const appointmentDate = new Date(appointment.date);
+    return !(appointmentDate > twoDaysAhead); // Direct date comparison
+  }
+
   return (
     <>
       <div className="container text-center fs-2 fw-bold mt-4">
@@ -99,6 +107,7 @@ export default function ViewBookedAppointment() {
                         onClick={() =>
                           deleteAppointment(item.appointmentNumber)
                         }
+                        disabled={isCancel(item)}
                       >
                         Cancel
                       </button>
