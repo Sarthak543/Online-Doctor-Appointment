@@ -90,7 +90,7 @@ export default function PatientPanel() {
         </div>
         <div
           className="w-75 "
-          style={{ overflowY: "auto", background: "rgb(240, 239, 238)" }}
+          style={{ overflowY: "auto", background: "#ececec" }}
         >
           <Outlet />
         </div>

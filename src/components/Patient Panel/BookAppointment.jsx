@@ -193,8 +193,8 @@ export default function BookAppointment() {
 
   return (
     <>
-      <h1 className="text-center">Book an appointment</h1>
-      <div className="container w-50 border border-danger">
+      <div className="container w-50 form-control mt-5">
+        <h1 className="text-center">Book an appointment</h1>
         <form
           action=""
           method="get"
