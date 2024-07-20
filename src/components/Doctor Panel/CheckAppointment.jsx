@@ -3,10 +3,10 @@ import { toast } from "react-toastify";
 import Appointment_Calender from "../Patient Panel/Appointment_Calender";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../Chat Panel/WebSocketContext";
+import Table from "../Table/Table";
 
 export default function CheckAppointment() {
   const [appointment, setappointment] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
   const modalRef = useRef(null);
   const [date, setDate] = useState(new Date());
   const [id, setid] = useState(0);
@@ -18,14 +18,20 @@ export default function CheckAppointment() {
       try {
         let name = sessionStorage.getItem("userName");
         const response = await fetch(
-          `http://localhost:8010/DoctorAppointment/${name}?pageNumber=${pageNumber}`,
+          `http://localhost:8010/DoctorAppointment/${name}`,
           {
             method: "post",
           }
         );
         const data = await response.json();
-
-        setappointment(data);
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const todaysAppointments = await data.filter((appointment) => {
+          const appointmentDate = new Date(appointment.date);
+          appointmentDate.setHours(0, 0, 0, 0);
+          return appointmentDate.getTime() === currentDate.getTime();
+        });
+        setappointment(todaysAppointments);
         // setappointment(data);
       } catch (error) {
         // console.clear();
@@ -34,7 +40,7 @@ export default function CheckAppointment() {
     }
 
     getAppointments();
-  }, [pageNumber]);
+  }, []);
 
   function modal(id) {
     modalRef.current.click();
@@ -90,126 +96,84 @@ export default function CheckAppointment() {
     );
   }
 
+  let columns = [
+    {
+      name: "S.No",
+      cell: (row, index) => index + 1,
+      sortable: false,
+      width: "100px",
+    },
+    {
+      name: "Name",
+      selector: (row) => row.patientName,
+      sortable: true,
+    },
+    {
+      name: "Appointment Date",
+      selector: (row) => {
+        const date = new Date(row.date);
+
+        // Extract date components
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1; // Months are zero-based
+        const day = date.getUTCDate();
+
+        // Extract time components
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+
+        // Convert hours from 24-hour to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+
+        // Format minutes to always have two digits
+        const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+        // Combine date and time
+        return (
+          `${year}-${month < 10 ? "0" + month : month}-${
+            day < 10 ? "0" + day : day
+          } ` + `${hours}:${formattedMinutes} ${ampm}`
+        );
+      },
+      sortable: true,
+    },
+    {
+      name: "Mobile",
+      selector: (row) => row.doctorNumber,
+    },
+    {
+      name: "Action",
+      selector: (row) => (
+        <>
+          <button
+            className="btn btn-outline-success badge-pill text-end me-3"
+            disabled={isConsultButtonDisabled(row)}
+            onClick={() => Consult(row)}
+          >
+            Consult
+          </button>
+          <button
+            className="btn btn-outline-danger badge-pill text-end w-50 text-center"
+            onClick={() => modal(row.appointmentNumber)}
+          >
+            Reschedule
+          </button>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
-      <div className="container d-flex justify-content-around align-items-center h-25">
-        <div
-          className="border rounded-4 h-75 w-25 d-flex"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <div className="w-25  d-flex justify-content-end align-items-center">
-            <i
-              className="fa-solid fa-hospital-user"
-              style={{ fontSize: "60px" }}
-            ></i>
-          </div>
-          <div className="w-75 d-flex flex-column justify-content-center">
-            <div className="">
-              <p className="text-center fw-medium fs-5">Total Patient</p>
-              <p className="text-center fw-medium fs-5 mb-0">2000+</p>
-              <p className="text-center">Till Today</p>
-            </div>
-          </div>
-        </div>
-        <div
-          className="border  rounded-4 h-75 w-25 d-flex"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <div className="w-25  d-flex justify-content-center align-items-center">
-            <i
-              className="fa-regular fa-calendar-check"
-              style={{ fontSize: "50px" }}
-            ></i>
-          </div>
-          <div className="w-75 d-flex flex-column">
-            <div className="mt-5">
-              <p className="text-center fw-medium ">
-                Today Appointment: {appointment.length}
-              </p>
-              <p className="text-center fw-medium">
-                {new Date().toLocaleDateString()}
-              </p>{" "}
-              {/* 2/05/2024 */}
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="border  rounded-4 h-75 w-25"
-          style={{ background: "rgb(214 224 210)" }}
-        >
-          <p className="text-center fs-5 fw-bold">Tip of the day</p>
-          <p className="ms-2">
-            Regular exercise has numerous benefits, including stress reduction,
-            improved cardiovascular health.
-          </p>
-        </div>
-      </div>
       {/* Table that shows appointments */}
-      <div className="container" style={{ width: "65vw" }}>
-        <p className="text-center fs-4 fw-bold">Appointments</p>
-        <div className="border-top rounded-2">
-          {/* appointmnet table */}
-          <table className="table table-hover transparent-table">
-            <thead>
-              <tr className="table-color">
-                <th scope="col">SNO.</th>
-                <th scope="col">Name</th>
-                <th scope="col">Appointment Date</th>
-                <th scope="col">Mobile</th>
-                <th scope="col text-end">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointment.map((item, index) => (
-                <tr>
-                  <th scope="row">{index + 1}</th>
-                  <td>{item.patientName}</td>
-                  <td>{item.date.substring(0, 10)}</td>
-                  <td>{item.patientNumber}</td>
-                  <td className="w-25">
-                    <button
-                      className="btn btn-outline-success badge-pill text-end me-3"
-                      disabled={isConsultButtonDisabled(item)}
-                      onClick={() => Consult(item)}
-                    >
-                      Consult
-                    </button>
-                    <button
-                      className="btn btn-outline-danger badge-pill text-end w-50 text-center"
-                      onClick={() => modal(item.appointmentNumber)}
-                    >
-                      Reschedule
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div
-          className="d-flex justify-content-between"
-          style={{ marginBottom: "15vh" }}
-        >
-          <button
-            className="btn btn-primary m-2"
-            onClick={() => {
-              setPageNumber(pageNumber - 1);
-            }}
-            disabled={pageNumber === 1}
-          >
-            Previous
-          </button>
-          <button
-            className="btn btn-primary m-2"
-            onClick={() => {
-              setPageNumber(pageNumber + 1);
-            }}
-            disabled={appointment.length < 7 || appointment.length === 0}
-          >
-            Next
-          </button>
-        </div>
+
+      <div className="container-fluid  table-style">
+        <h1 className="text-center mb-0 pt-2 table-heading">
+          Today's Appointment
+        </h1>
+        <Table columns={columns} data={appointment} user={"doctor"} />
       </div>
 
       <button

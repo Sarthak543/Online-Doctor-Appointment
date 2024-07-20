@@ -83,7 +83,33 @@ export default function ViewBookedAppointment() {
     },
     {
       name: "Appointment Date",
-      selector: (row) => row.date.substring(0, 10),
+      selector: (row) => {
+        const date = new Date(row.date);
+
+        // Extract date components
+        const year = date.getUTCFullYear();
+        const month = date.getUTCMonth() + 1; // Months are zero-based
+        const day = date.getUTCDate();
+
+        // Extract time components
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? "PM" : "AM";
+
+        // Convert hours from 24-hour to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+
+        // Format minutes to always have two digits
+        const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+        // Combine date and time
+        return (
+          `${year}-${month < 10 ? "0" + month : month}-${
+            day < 10 ? "0" + day : day
+          } ` + `${hours}:${formattedMinutes} ${ampm}`
+        );
+      },
       sortable: true,
     },
     {
