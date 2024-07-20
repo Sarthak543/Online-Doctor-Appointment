@@ -111,11 +111,7 @@ export default function ConsultantHistory() {
       <h1 className="text-center mb-0 pt-2 table-heading">
         Consultant History
       </h1>
-      <Table
-        columns={columns}
-        data={appointment}
-        title={"Consultant History"}
-      />
+      <Table columns={columns} data={appointment} user={"patient"} />
     </div>
   );
 }

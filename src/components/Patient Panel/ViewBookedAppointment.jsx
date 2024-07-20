@@ -29,7 +29,7 @@ export default function ViewBookedAppointment() {
     }
 
     getAppointments();
-  }, [pageNumber]);
+  }, []);
 
   async function deleteAppointment(id) {
     try {
@@ -118,11 +118,7 @@ export default function ViewBookedAppointment() {
         <h1 className="text-center mb-0 pt-2 table-heading">
           Appointment History
         </h1>
-        <Table
-          columns={columns}
-          data={appointment}
-          title={"Appointment History"}
-        />
+        <Table columns={columns} data={appointment} user={"patient"} />
       </div>
     </>
   );

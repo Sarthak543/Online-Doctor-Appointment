@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Table from "../Table/Table";
 
 export default function AppointmentHistory() {
   const [appointment, setappointment] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
   const navigate = useNavigate();
   useEffect(() => {
     async function getAppointments() {
       try {
         let name = sessionStorage.getItem("userName");
         const response = await fetch(
-          `http://localhost:8010/DoctorAppointment/${name}?pageNumber=${pageNumber}`,
+          `http://localhost:8010/DoctorAppointment/${name}`,
           {
             method: "post",
           }
         );
         const data = await response.json();
-        console.clear();
-        console.log("asdfghjkl;'asdfghjkl;'       ", data);
         setappointment(data);
       } catch (error) {
         console.clear();
@@ -27,7 +25,7 @@ export default function AppointmentHistory() {
     }
 
     getAppointments();
-  }, [pageNumber]);
+  }, []);
 
   async function deleteAppointment(id) {
     try {
@@ -42,7 +40,7 @@ export default function AppointmentHistory() {
         setappointment(
           appointment.filter((item) => item.appointmentNumber !== id)
         );
-        toast("Appointment cancelled"); // Show toast only if deletion is successful
+        toast("Appointment History Deleted"); // Show toast only if deletion is successful
       } else {
         console.error("Appointment deletion failed"); // Handle potential errors
       }
@@ -58,84 +56,60 @@ export default function AppointmentHistory() {
     });
   };
 
-  return (
-    <>
-      <div className="container text-center fs-2 fw-bold">
-        Consultant History
-      </div>
-      {
-        <div className="container w-75">
-          <div className="border-top rounded-2 mt-5">
-            {/* Consultant table */}
-            <table className="table table-hover transparent-table">
-              <thead>
-                <tr className="table-color">
-                  <th scope="col">SNo.</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Appointment Date</th>
-                  <th scope="col">Mobile</th>
-                  <th scope="col text-end">History</th>
-                </tr>
-              </thead>
-              <tbody>
-                {appointment.map((item, index) => (
-                  <tr>
-                    <th scope="row">{index + 1}</th>
-                    <td>{item.patientName}</td>
-                    <td>{item.date.substring(0, 10)}</td>
-                    <td>{item.patientNumber}</td>
-                    <td className="w-25">
-                      <button
-                        className="btn btn-outline-success badge-pill text-end me-3"
-                        onClick={() =>
-                          loadChatHistory(
-                            item.appointmentNumber,
-                            item.patientName,
-                            item.doctorName
-                          )
-                        }
-                      >
-                        Open
-                      </button>
-                      <button
-                        className="btn btn-outline-danger badge-pill text-end"
-                        onClick={() =>
-                          deleteAppointment(item.appointmentNumber)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div
-            className="d-flex justify-content-between"
-            style={{ marginBottom: "15vh" }}
+  let columns = [
+    {
+      name: "S.No",
+      cell: (row, index) => index + 1,
+      sortable: false,
+      width: "100px",
+    },
+    {
+      name: "Name",
+      selector: (row) => row.patientName,
+      sortable: true,
+    },
+    {
+      name: "Appointment Date",
+      selector: (row) => row.date.substring(0, 10),
+      sortable: true,
+    },
+    {
+      name: "Mobile",
+      selector: (row) => row.doctorNumber,
+    },
+    {
+      name: "History",
+      selector: (row) => (
+        <>
+          <button
+            className="btn btn-outline-success badge-pill text-end me-3"
+            onClick={() =>
+              loadChatHistory(
+                row.appointmentNumber,
+                row.patientName,
+                row.doctorName
+              )
+            }
           >
-            <button
-              className="btn btn-primary m-2"
-              onClick={() => {
-                setPageNumber(pageNumber - 1);
-              }}
-              disabled={pageNumber === 1}
-            >
-              Previous
-            </button>
-            <button
-              className="btn btn-primary m-2"
-              onClick={() => {
-                setPageNumber(pageNumber + 1);
-              }}
-              disabled={appointment.length < 7 || appointment.length === 0}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      }
-    </>
+            Open
+          </button>
+          <button
+            className="btn btn-outline-danger badge-pill text-end"
+            onClick={() => deleteAppointment(row.appointmentNumber)}
+          >
+            Delete
+          </button>
+        </>
+      ),
+    },
+  ];
+
+  return (
+    <div className="container-fluid  table-style">
+      <h1 className="text-center mb-0 pt-2 table-heading">
+        Consultant History
+      </h1>
+      <Table columns={columns} data={appointment} user={"doctor"} />
+    </div>
   );
 }
