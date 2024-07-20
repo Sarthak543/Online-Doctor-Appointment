@@ -58,6 +58,7 @@ export default function Appointment_Calender({ Parent_date, busyDates }) {
           value={date}
           minDate={new Date()}
           maxDate={getFifteenDaysFromToday()}
+          className={"w-100"}
         />
       </div>
     </>

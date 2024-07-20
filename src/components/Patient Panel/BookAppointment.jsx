@@ -193,83 +193,111 @@ export default function BookAppointment() {
 
   return (
     <>
-      <div className="container w-50 form-control mt-5">
-        <h1 className="text-center">Book an appointment</h1>
+      <div
+        className="container bg-white p-0 border border-2 rounded-4"
+        style={{ width: "50vw", marginTop: "10vh" }}
+      >
+        <h1
+          className="text-center fw-bold bg-secondary mb-3 pt-2"
+          style={{ height: "8vh", fontSize: "30px" }}
+        >
+          Book an Appointment
+        </h1>
         <form
-          action=""
+          className="container p-3"
           method="get"
-          className="mt-5"
           onSubmit={initialize_payment}
         >
-          <div className="row ms-2 fs-6 fw-bold">Doctors details</div>
-          <hr />
-
-          <div className="row">
-            <div className="col-6">
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                value={selectedSpecialization}
-                onChange={(e) => setSelectedSpecialization(e.target.value)}
-                disabled={specializations.length === 0} // Disable if no specializations
-              >
-                <option value="">Select Specialization</option>
-                {specializations.length > 0 ? ( // Render options only if data is present
-                  specializations.map((spec) => (
-                    <option value={spec}>{spec}</option>
-                  ))
-                ) : (
-                  <option disabled>Loading specializations...</option>
-                )}
-              </select>
+          <div className="d-flex">
+            {/* Containing the items and calendar */}
+            <div className="container">
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">
+                  Select Specialization
+                </label>
+                <div>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    value={selectedSpecialization}
+                    onChange={(e) => setSelectedSpecialization(e.target.value)}
+                    disabled={specializations.length === 0} // Disable if no specializations
+                  >
+                    <option value="">Select Specialization</option>
+                    {specializations.length > 0 ? ( // Render options only if data is present
+                      specializations.map((spec) => (
+                        <option value={spec}>{spec}</option>
+                      ))
+                    ) : (
+                      <option disabled>Loading specializations...</option>
+                    )}
+                  </select>
+                </div>
+              </div>
+              <div class="mb-4">
+                <label for="exampleInputPassword1" class="form-label">
+                  Select Doctor
+                </label>
+                <div>
+                  <select
+                    class="form-select"
+                    aria-label="Default select example"
+                    value={selectedDoctor}
+                    onChange={(e) => setSelectedDoctor(e.target.value)}
+                    disabled={doctors.length === 0 || !selectedSpecialization} // Disable if no doctors or no specialization selected
+                  >
+                    <option value="">Select Doctor</option>
+                    {doctors.length > 0 && selectedSpecialization ? ( // Render options only if data and specialization is selected
+                      doctors.map((doctor) => (
+                        <option value={doctor}>{doctor}</option>
+                      ))
+                    ) : (
+                      <option disabled>Loading doctors...</option>
+                    )}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="exampleInputPassword1" class="form-label">
+                  Problem Description
+                </label>
+                <div>
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    placeholder="Describe your problem"
+                    value={Problem}
+                    onChange={(e) => {
+                      setProblem(e.target.value);
+                      console.log(e.target.value);
+                    }}
+                  ></textarea>
+                </div>
+              </div>
             </div>
-            <div className="col-6">
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                value={selectedDoctor}
-                onChange={(e) => setSelectedDoctor(e.target.value)}
-                disabled={doctors.length === 0 || !selectedSpecialization} // Disable if no doctors or no specialization selected
-              >
-                <option value="">Select Doctor</option>
-                {doctors.length > 0 && selectedSpecialization ? ( // Render options only if data and specialization is selected
-                  doctors.map((doctor) => (
-                    <option value={doctor}>{doctor}</option>
-                  ))
-                ) : (
-                  <option disabled>Loading doctors...</option>
-                )}
-              </select>
+            <div className="container">
+              <label for="exampleInputPassword1" class="form-label">
+                Choose Appointment Date
+              </label>
+              <div>
+                <Appointment_Calender
+                  Parent_date={setDate}
+                  busyDates={busyDates}
+                />
+              </div>
             </div>
           </div>
-
-          <div className="row ms-2 fs-6 fw-bold mt-4">
-            Select Appointment Date
-          </div>
-          <hr />
-          <div className=" container w-50 mx-auto">
-            <Appointment_Calender Parent_date={setDate} busyDates={busyDates} />
-          </div>
-          <div className="container mt-4">
-            <textarea
-              class="form-control"
-              rows="3"
-              placeholder="Describe your problem"
-              value={Problem}
-              onChange={(e) => {
-                setProblem(e.target.value);
-                console.log(e.target.value);
-              }}
-            ></textarea>
-          </div>
-          <div className="row my-4">
-            <button className="btn btn-success offset-3 col-2" type="submit">
-              {" "}
-              Book
-            </button>
-            <button className="btn btn-danger offset-1 col-2" type="reset">
-              Reset
-            </button>
+          <div className="container">
+            {/* containing the buttons */}
+            <div className="row my-4">
+              <button className="btn btn-success offset-3 col-2" type="submit">
+                {" "}
+                Book
+              </button>
+              <button className="btn btn-danger offset-1 col-2" type="reset">
+                Reset
+              </button>
+            </div>
           </div>
         </form>
       </div>

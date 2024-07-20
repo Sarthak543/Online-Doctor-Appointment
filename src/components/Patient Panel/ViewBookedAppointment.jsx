@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../Chat Panel/WebSocketContext";
+import Table from "../Table/Table";
 
 export default function ViewBookedAppointment() {
   const [appointment, setappointment] = useState([]);
@@ -69,79 +70,61 @@ export default function ViewBookedAppointment() {
     return !(appointmentDate > twoDaysAhead); // Direct date comparison
   }
 
+  let columns = [
+    {
+      name: "S.No",
+      cell: (row, index) => index + 1,
+      sortable: false,
+      width: "100px",
+    },
+    {
+      name: "Doctor Name",
+      selector: (row) => row.doctorName,
+      sortable: true,
+    },
+    {
+      name: "Appointment Date",
+      selector: (row) => row.date.substring(0, 10),
+      sortable: true,
+    },
+    {
+      name: "Mobile",
+      selector: (row) => row.doctorNumber,
+    },
+    {
+      name: "Action",
+      selector: (row) => (
+        <>
+          <button
+            className="btn btn-outline-success badge-pill text-end me-3 "
+            onClick={() => Consult(row)}
+          >
+            Open
+          </button>
+          <button
+            className="btn btn-outline-danger badge-pill text-end"
+            onClick={() => deleteAppointment(row.appointmentNumber)}
+            disabled={isCancel(row)}
+          >
+            Cancel
+          </button>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
-      <div className="container text-center fs-2 fw-bold mt-4">
-        Appointment History
+      <div className="container-fluid  table-style">
+        <h1 className="text-center mb-0 pt-2 table-heading">
+          Appointment History
+        </h1>
+        <Table
+          columns={columns}
+          data={appointment}
+          title={"Appointment History"}
+        />
       </div>
-      {appointment.length > 0 && ( // Check if appointments exist
-        <div className="container w-75">
-          <div className="border-top rounded-2 mt-5">
-            {/* Consultant table */}
-            <table className="table table-hover transparent-table">
-              <thead>
-                <tr className="table-color">
-                  <th scope="col">SNo.</th>
-                  <th scope="col">Doctor Name</th>
-                  <th scope="col">Appointment Date</th>
-                  <th scope="col">Mobile</th>
-                  <th scope="col text-end">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {appointment.map((item, index) => (
-                  <tr key={index}>
-                    <th scope="row">{index + 1 + (pageNumber - 1) * 7}</th>
-                    <td>{item.doctorName}</td>
-                    <td>{item.date.substring(0, 10)}</td>
-                    <td>{item.doctorNumber}</td>
-                    <td className="w-25">
-                      <button
-                        className="btn btn-outline-success badge-pill text-end me-3 "
-                        onClick={() => Consult(item)}
-                      >
-                        Open
-                      </button>
-                      <button
-                        className="btn btn-outline-danger badge-pill text-end"
-                        onClick={() =>
-                          deleteAppointment(item.appointmentNumber)
-                        }
-                        disabled={isCancel(item)}
-                      >
-                        Cancel
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div
-            className="d-flex justify-content-between"
-            style={{ marginBottom: "15vh" }}
-          >
-            <button
-              className="btn btn-primary m-2"
-              onClick={() => {
-                setPageNumber(pageNumber - 1);
-              }}
-              disabled={pageNumber === 1}
-            >
-              Previous
-            </button>
-            <button
-              className="btn btn-primary m-2"
-              onClick={() => {
-                setPageNumber(pageNumber + 1);
-              }}
-              disabled={appointment.length < 7 || appointment.length === 0}
-            >
-              Next
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 }
