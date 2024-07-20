@@ -2,39 +2,75 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Tables formatting */
-.styled-table {
-  border-collapse: collapse;
-  margin: 15px 0;
-  font-size: 0.9em;
-  font-family: sans-serif;
-  min-width: 100%;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+/*Font style  */
+.font-style {
+  font-family: "Archivo Narrow", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
 }
 
-.styled-table thead tr {
-  background-color: #009879;
-  color: #ffffff;
-  text-align: left;
+/* Side dashboard styling*/
+
+.side-menu-item {
+  padding-left: 3vw;
+  cursor: pointer;
+  width: 80%;
+  margin: auto;
+  border: 1px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 15px;
+  transition: background-color 0.1s ease, color 0.3s ease;
 }
 
-.styled-table th,
-.styled-table td {
-  padding: 12px 15px;
+.side-menu-item:hover {
+  background: rgb(236, 236, 236);
+  color: black;
 }
 
-.styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
+.side-menu-item.active {
+  background: #8f87fd;
+  color: white;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+/* Table styling */
+
+.table-style {
+  border: 1px solid #a9a9a9;
+  background-color: white;
+  width: 75vw;
+  padding: 0px;
+  height: 100%;
 }
 
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+.table-heading {
+  background-color: rgb(108 117 125);
+  font-family: "Archivo Narrow", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-size: 30px;
+  font-style: normal;
+  height: 8vh;
+}
+
+/* Appointment panel css */
+.appointment-style {
+  border: 1px solid black;
+  width: 100vw;
+  padding: 0px 0px;
+  margin: 0px 0px;
+  height: 100vh;
+}
+
+.appointment-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0px;
 }
 
 /* Fomatting class for calendar */
