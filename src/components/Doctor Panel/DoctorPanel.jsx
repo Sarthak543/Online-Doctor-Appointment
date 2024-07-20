@@ -27,7 +27,7 @@ export default function DoctorPanel() {
       <div>
         <div className="d-flex" style={{ height: "100vh" }}>
           <div
-            className="w-25"
+            className="w-25 border-end border-2"
             style={{
               minHeight: "100vh",
             }}
@@ -95,10 +95,7 @@ export default function DoctorPanel() {
             </Link>
             {/*  */}
           </div>
-          <div
-            className="w-75"
-            style={{ overflow: "auto", background: "rgb(240, 239, 238)" }}
-          >
+          <div className="w-75 bg-white" style={{ overflow: "auto" }}>
             <Outlet />
           </div>
         </div>
