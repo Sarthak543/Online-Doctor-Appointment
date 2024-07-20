@@ -19,8 +19,15 @@ export default function ConsultantHistory() {
         );
 
         const data = await response.json();
-        console.clear();
-        setappointment(data);
+        let currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0);
+        const todaysAppointments = await data.filter((appointment) => {
+          const appointmentDate = new Date(appointment.date);
+          appointmentDate.setHours(0, 0, 0, 0);
+          return appointmentDate.getTime() < currentDate.getTime();
+        });
+
+        setappointment(todaysAppointments);
       } catch (error) {
         console.clear();
         console.log(error);

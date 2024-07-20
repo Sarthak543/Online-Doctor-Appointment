@@ -5,6 +5,7 @@ import documentContext from "../../context/Document_State/DocumentContext";
 
 export default function DoctorPanel() {
   const [doctor, setdoctor] = useState({});
+  const [activeItem, setActiveItem] = useState("");
   const { setisUserLogIn } = useContext(documentContext);
 
   useEffect(() => {
@@ -21,6 +22,10 @@ export default function DoctorPanel() {
     fetchedDoctorData();
     setisUserLogIn(true);
   }, []);
+
+  const handleItemClick = (item) => {
+    setActiveItem(item);
+  };
 
   return (
     <>
@@ -52,10 +57,12 @@ export default function DoctorPanel() {
               <Link
                 to={"/DoctorPanel/check-appointment"}
                 className="text-reset text-decoration-none"
+                onClick={() => handleItemClick("Check Appointments")}
               >
                 <div
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "3vw", cursor: "pointer" }}
+                  className={`d-flex align-items-center side-menu-item ${
+                    activeItem === "Check Appointments" ? "active" : ""
+                  }`}
                 >
                   <i className="fa-solid fa-file-circle-check me-2 "></i>
                   <p className="fw-medium mt-3">Check Appointments</p>
@@ -64,13 +71,31 @@ export default function DoctorPanel() {
             </div>
             {/*  */}
             <Link
-              to={"/DoctorPanel/consultant-history"}
+              to={"/DoctorPanel/upcoming-appointment"}
               className="text-reset text-decoration-none"
+              onClick={() => handleItemClick("Upcoming Appointments")}
             >
               <div style={{ height: "8vh" }}>
                 <div
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "3vw", cursor: "pointer" }}
+                  className={`d-flex align-items-center side-menu-item ${
+                    activeItem === "Upcoming Appointments" ? "active" : ""
+                  }`}
+                >
+                  <i className="fa-solid fa-file-circle-check me-2 "></i>
+                  <p className="fw-medium mt-3">Upcoming Appointments</p>
+                </div>
+              </div>
+            </Link>
+            <Link
+              to={"/DoctorPanel/consultant-history"}
+              className="text-reset text-decoration-none"
+              onClick={() => handleItemClick("Consultant History")}
+            >
+              <div style={{ height: "8vh" }}>
+                <div
+                  className={`d-flex align-items-center side-menu-item ${
+                    activeItem === "Consultant History" ? "active" : ""
+                  }`}
                 >
                   <i className="fa-solid fa-clock-rotate-left me-2"></i>
                   <p className="fw-medium mt-3">Consultant History</p>
@@ -82,11 +107,13 @@ export default function DoctorPanel() {
             <Link
               to={"/DoctorPanel/feedback"}
               className="text-reset text-decoration-none"
+              onClick={() => handleItemClick("Feedback")}
             >
               <div style={{ height: "8vh" }}>
                 <div
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "3vw", cursor: "pointer" }}
+                  className={`d-flex align-items-center side-menu-item ${
+                    activeItem === "Feedback" ? "active" : ""
+                  }`}
                 >
                   <i className="fa-solid fa-message me-2"></i>
                   <p className="fw-medium mt-3">Feedback</p>

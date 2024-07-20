@@ -98,6 +98,22 @@ export default function PatientPanel() {
               </div>
             </div>
           </Link>
+          <Link
+            to={"/PatientPanel/feedback"}
+            className="text-reset text-decoration-none"
+            onClick={() => handleItemClick("Feedback")}
+          >
+            <div style={{ height: "8vh" }}>
+              <div
+                className={`d-flex align-items-center side-menu-item ${
+                  activeItem === "Feedback" ? "active" : ""
+                }`}
+              >
+                <i className="fa-solid fa-message me-2"></i>
+                <p className="fw-medium mt-3">Feedback</p>
+              </div>
+            </div>
+          </Link>
         </div>
         <div
           className="w-75 bg-white"
