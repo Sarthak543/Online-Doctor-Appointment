@@ -17,6 +17,7 @@ import FeedBack from './components/Doctor Panel/FeedBack'
 import PatientPanel from './components/Patient Panel/PatientPanel';
 import BookAppointment from './components/Patient Panel/BookAppointment';
 import ConsultantHistory from './components/Patient Panel/ConsultantHistory';
+import UpcomingAppointment from './components/Doctor Panel/UpcomingAppointment';
 import ViewBookedAppointment from './components/Patient Panel/ViewBookedAppointment';
 import Appointment_Calender from './components/Patient Panel/Appointment_Calender';
 import { ToastContainer, toast } from 'react-toastify';
@@ -57,6 +58,7 @@ function App() {
       children: [
         { path: "/DoctorPanel/check-appointment", element: <CheckAppointment /> },
         { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow /> },
+        { path: "/DoctorPanel/upcoming-appointment", element: <UpcomingAppointment /> },
         { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory /> },
         { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat /> },
         { path: "/DoctorPanel/feedback", element: <FeedBack /> }
@@ -71,7 +73,8 @@ function App() {
         { path: "/PatientPanel/ConsultantHistory/showChat", element: <ShowChat /> },
         { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment /> },
         { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow /> },
-        { path: "/PatientPanel/date", element: <Appointment_Calender /> }
+        { path: "/PatientPanel/date", element: <Appointment_Calender /> },
+        { path: "/PatientPanel/feedback", element: <FeedBack /> }
       ]
     }
   ])
