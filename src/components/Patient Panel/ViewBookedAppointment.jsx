@@ -6,7 +6,6 @@ import Table from "../Table/Table";
 
 export default function ViewBookedAppointment() {
   const [appointment, setappointment] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
   const { connect } = useWebSocket();
   let navigate = useNavigate();
 
@@ -15,7 +14,7 @@ export default function ViewBookedAppointment() {
       try {
         const userName = sessionStorage.getItem("userName");
         const response = await fetch(
-          `http://localhost:8010/PatientAppointment/${userName}?pageNumber=${pageNumber}`,
+          `http://localhost:8010/PatientAppointment/${userName}`,
           {
             method: "post",
           }

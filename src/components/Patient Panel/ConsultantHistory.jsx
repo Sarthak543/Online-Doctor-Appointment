@@ -5,7 +5,6 @@ import Table from "../Table/Table";
 
 export default function ConsultantHistory() {
   const [appointment, setappointment] = useState([]);
-  const [pageNumber, setPageNumber] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,7 +12,7 @@ export default function ConsultantHistory() {
       try {
         const userName = sessionStorage.getItem("userName");
         const response = await fetch(
-          `http://localhost:8010/PatientAppointment/${userName}?pageNumber=${pageNumber}`,
+          `http://localhost:8010/PatientAppointment/${userName}`,
           {
             method: "post",
           }
