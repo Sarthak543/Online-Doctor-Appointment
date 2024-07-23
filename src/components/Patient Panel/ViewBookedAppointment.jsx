@@ -79,6 +79,24 @@ export default function ViewBookedAppointment({ loader }) {
     return !(appointmentDate > twoDaysAhead); // Direct date comparison
   }
 
+  function isConsultButtonDisabled(appointment) {
+    // Get current time in milliseconds
+    const currentTime = new Date().getTime();
+
+    // Extract appointment time (hours and minutes)
+    const appointmentDate = new Date(appointment.date);
+    const appointmentTime = appointmentDate.getTime();
+
+    // Calculate the end of the two-minute window after the appointment time
+    const twoMinutesAfterAppointment = appointmentTime + 2 * 60 * 1000;
+
+    // Compare current time with the two-minute window
+    return !(
+      currentTime >= appointmentTime &&
+      currentTime <= twoMinutesAfterAppointment
+    );
+  }
+
   let columns = [
     {
       name: "S.No",
@@ -133,6 +151,7 @@ export default function ViewBookedAppointment({ loader }) {
           <button
             className="btn btn-outline-success badge-pill text-end me-3 "
             onClick={() => Consult(row)}
+            disabled={isConsultButtonDisabled(row)}
           >
             Open
           </button>
