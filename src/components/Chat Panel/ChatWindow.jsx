@@ -1,63 +1,78 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useWebSocket } from "./WebSocketContext";
+import { useNavigate } from "react-router-dom";
 
 export default function ChatWindow() {
-
   const location = useLocation();
-  const { item,name,heading } = location.state;
-  // const name = 
+  const navigate = useNavigate();
+  const [isConnected, setIsConnected] = useState(true);
+  const { item, name, heading } = location.state;
+  // const name =
   const { stompClient } = useWebSocket();
   const [messages, setmessages] = useState([]);
   const messageContainerRef = useRef(null);
-  const i = 0
+  const i = 0;
 
   useEffect(() => {
-    console.log(item,i+1)
-    if (stompClient) {
+    if (stompClient && isConnected) {
       console.log("subscribing to topic");
-      stompClient.subscribe("/chat/return-to", (response) => {
-        const message = JSON.parse(response.body);
-        console.log("This is the message i received " + message);
-        setmessages((prevMessages) => [...prevMessages, message]);
-      });
-    } else {
-      console.clear();
-      console.log("Subscribing error");
-    }
+      const subscription = stompClient.subscribe(
+        "/chat/return-to",
+        (response) => {
+          const message = JSON.parse(response.body);
+          console.log("This is the message I received " + message);
+          setmessages((prevMessages) => [...prevMessages, message]);
+        }
+      );
 
-    setTimeout(() => {
-      if (messageContainerRef.current) {
-        messageContainerRef.current.scrollTo({
-          top: messageContainerRef.current.scrollHeight,
-          behavior: "smooth",
-        });
-      }
-    }, 100);
-  }, [stompClient]);
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [stompClient, isConnected]);
+
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTo({
+        top: messageContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages]);
 
   const send = () => {
-    let text = document.getElementById("message").value
+    let text = document.getElementById("message").value;
     // document.getElementById("message").value=''
-    if(text.length>0){
-      console.log(item)
+    if (text.length > 0) {
+      console.log(item);
       let temp = {
         // id: i+1,
         sender: name,
         message: document.getElementById("message").value,
-        appointment:item
-      }
+        appointment: item,
+      };
       // Broadcast logic
-      stompClient.send("/app/message",{},JSON.stringify(temp))
+      stompClient.send("/app/message", {}, JSON.stringify(temp));
       //
       setTimeout(() => {
         if (messageContainerRef.current) {
           messageContainerRef.current.scrollTo({
             top: messageContainerRef.current.scrollHeight,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
         }
       }, 100);
+    }
+  };
+
+  const handleDisconnect = () => {
+    if (stompClient) {
+      stompClient.disconnect(() => {
+        console.log("Disconnected from WebSocket");
+        setIsConnected(false);
+        navigate(-1);
+      });
     }
   };
 
@@ -67,11 +82,16 @@ export default function ChatWindow() {
         className="d-flex flex-column h-full"
         style={{ background: "rgba(0,0,0,0.1" }}
       >
-        <div className="chat-header-bg text-light h-7">
+        <div className="chat-header-bg text-light h-7 d-flex justify-content-between me-3">
           <p className="ms-5 pt-2 h-100 align-middle fs-5">
             <b>{heading}</b>
-            <b>{item.appointmentNumber}</b>
           </p>
+          <button
+            className="btn btn-light h-75 mt-2 me-2"
+            onClick={handleDisconnect}
+          >
+            Disconnect
+          </button>
         </div>
         <div
           className=" h-89 overflow-auto"
