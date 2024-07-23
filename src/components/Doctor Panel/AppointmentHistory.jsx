@@ -3,11 +3,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Table from "../Table/Table";
 
-export default function AppointmentHistory() {
+export default function AppointmentHistory({ loader }) {
   const [appointment, setappointment] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     async function getAppointments() {
+      loader(30);
       try {
         let name = sessionStorage.getItem("userName");
         const response = await fetch(
@@ -16,18 +17,22 @@ export default function AppointmentHistory() {
             method: "post",
           }
         );
+        loader(50);
         const data = await response.json();
         setappointment(data);
+        loader(70);
       } catch (error) {
         console.clear();
         console.log(error);
       }
     }
-
+    loader(10);
     getAppointments();
+    loader(100);
   }, []);
 
   async function deleteAppointment(id) {
+    loader(20);
     try {
       const response = await fetch(
         `http://localhost:8010/deletePatient/${id}`,
@@ -35,7 +40,7 @@ export default function AppointmentHistory() {
           method: "get",
         }
       );
-
+      loader(40);
       if (response.ok) {
         setappointment(
           appointment.filter((item) => item.appointmentNumber !== id)
@@ -48,6 +53,7 @@ export default function AppointmentHistory() {
       console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   const loadChatHistory = (appointmentNumber, patientName, doctorName) => {

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../Chat Panel/WebSocketContext";
 import Table from "../Table/Table";
 
-export default function UpcomingAppointment() {
+export default function UpcomingAppointment({ loader }) {
   const [appointment, setappointment] = useState([]);
   const modalRef = useRef(null);
   const [date, setDate] = useState(new Date());
@@ -16,6 +16,7 @@ export default function UpcomingAppointment() {
   useEffect(() => {
     async function getAppointments() {
       try {
+        loader(30);
         let name = sessionStorage.getItem("userName");
         const response = await fetch(
           `http://localhost:8010/DoctorAppointment/${name}`,
@@ -23,6 +24,7 @@ export default function UpcomingAppointment() {
             method: "post",
           }
         );
+        loader(40);
         const data = await response.json();
         let currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
@@ -32,14 +34,16 @@ export default function UpcomingAppointment() {
           return appointmentDate.getTime() > currentDate.getTime();
         });
         setappointment(todaysAppointments);
+        loader(70);
         // setappointment(data);
       } catch (error) {
         // console.clear();
         console.log(error);
       }
     }
-
+    loader(10);
     getAppointments();
+    loader(100);
   }, []);
 
   function modal(id) {
@@ -48,6 +52,7 @@ export default function UpcomingAppointment() {
   }
 
   async function updateAppointment() {
+    loader(10);
     try {
       const response = await fetch(
         `http://localhost:8010/updateAppointment/${id}/${date}`,
@@ -55,6 +60,7 @@ export default function UpcomingAppointment() {
           method: "get",
         }
       );
+      loader(60);
       if (response.ok) {
         toast("Appointment Reschuduled");
       } else {
@@ -64,10 +70,10 @@ export default function UpcomingAppointment() {
       // console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   async function Consult(item) {
-    await connect();
     navigate("Consult", {
       state: { item, name: item.doctorName, heading: item.patientName },
     });

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Table from "../Table/Table";
 
-export default function TotalAppoinntments() {
+export default function TotalAppoinntments({ loader }) {
   const [appointments, setappointments] = useState([], []);
   const [update, setupdate] = useState(false);
 
   useEffect(() => {
     async function getAppointments() {
+      loader(20);
       try {
         const response = await fetch(
           "http://localhost:8010/getAllAppointments",
@@ -15,33 +16,37 @@ export default function TotalAppoinntments() {
             method: "get",
           }
         );
-
+        loader(40);
         const data = await response.json();
         setappointments(data);
+        loader(70);
       } catch (error) {
         console.clear();
         console.log(error);
       }
     }
+    loader(10);
     getAppointments();
+    loader(100);
   }, []);
 
   async function deleteAppointment(id) {
     try {
-      // alert(id);
+      loader(10);
       const response = await fetch(
         `http://localhost:8010/deletePatient/${id}`,
         {
           method: "get",
         }
       );
-
+      loader(20);
       if (response.ok) {
         setappointments(
           appointments.filter((item) => item.appointmentNumber !== id)
         );
         toast("Appointment Deleted"); // Show toast only if deletion is successful
         setupdate(!update);
+        loader(50);
       } else {
         console.error("Unable to Delete appointment"); // Handle potential errors
       }
@@ -49,6 +54,7 @@ export default function TotalAppoinntments() {
       console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   let columns = [

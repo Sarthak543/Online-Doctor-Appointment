@@ -2,19 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Appointment_Calender from "../Patient Panel/Appointment_Calender";
 import { useNavigate } from "react-router-dom";
-import { useWebSocket } from "../Chat Panel/WebSocketContext";
 import Table from "../Table/Table";
 
-export default function CheckAppointment() {
+export default function CheckAppointment({ loader }) {
   const [appointment, setappointment] = useState([]);
   const modalRef = useRef(null);
   const [date, setDate] = useState(new Date());
   const [id, setid] = useState(0);
-  const { connect } = useWebSocket();
   let navigate = useNavigate();
 
   useEffect(() => {
     async function getAppointments() {
+      loader(30);
       try {
         let name = sessionStorage.getItem("userName");
         const response = await fetch(
@@ -23,6 +22,7 @@ export default function CheckAppointment() {
             method: "post",
           }
         );
+        loader(50);
         const data = await response.json();
         let currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
@@ -31,6 +31,7 @@ export default function CheckAppointment() {
           appointmentDate.setHours(0, 0, 0, 0);
           return appointmentDate.getTime() === currentDate.getTime();
         });
+        loader(70);
         setappointment(todaysAppointments);
         // setappointment(data);
       } catch (error) {
@@ -38,8 +39,9 @@ export default function CheckAppointment() {
         console.log(error);
       }
     }
-
+    loader(10);
     getAppointments();
+    loader(100);
   }, []);
 
   function modal(id) {
@@ -48,6 +50,7 @@ export default function CheckAppointment() {
   }
 
   async function updateAppointment() {
+    loader(20);
     try {
       const response = await fetch(
         `http://localhost:8010/updateAppointment/${id}/${date}`,
@@ -64,10 +67,10 @@ export default function CheckAppointment() {
       // console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   async function Consult(item) {
-    await connect();
     navigate("Consult", {
       state: { item, name: item.doctorName, heading: item.patientName },
     });

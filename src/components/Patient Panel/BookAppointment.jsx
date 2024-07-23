@@ -3,7 +3,7 @@ import Appointment_Calender from "./Appointment_Calender";
 import { toast } from "react-toastify";
 import useRazorpay from "react-razorpay";
 
-export default function BookAppointment() {
+export default function BookAppointment({ loader }) {
   const [specializations, setSpecializations] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
@@ -15,10 +15,12 @@ export default function BookAppointment() {
 
   useEffect(() => {
     async function getspecialization() {
+      loader(30);
       try {
         const response = await fetch("http://localhost:8010/specialization", {
           method: "post",
         });
+        loader(50);
         const fetchedData = await response.json();
         setSpecializations(fetchedData);
       } catch (error) {
@@ -26,7 +28,9 @@ export default function BookAppointment() {
       }
     }
     try {
+      loader(10);
       getspecialization();
+      loader(100);
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +112,9 @@ export default function BookAppointment() {
                 console.log(response.razorpay_signature);
                 console.log("Payment successfull");
                 toast("Payment Successfull");
+                loader(10);
                 save_appointment_to_DB();
+                loader(100);
                 // sessionStorage.removeItem("appointmentData");
               },
               prefill: {
@@ -147,10 +153,12 @@ export default function BookAppointment() {
   };
 
   const save_appointment_to_DB = async () => {
+    loader(20);
     const formData = new FormData();
     const storedAppointmentData = JSON.parse(
       sessionStorage.getItem("appointmentData")
     );
+    loader(30);
 
     //appending all the data from patData to formData
     formData.append(
@@ -162,7 +170,7 @@ export default function BookAppointment() {
     formData.append("problem", storedAppointmentData.problem);
     formData.append("patientName", sessionStorage.getItem("userName"));
     formData.append("pNumber", sessionStorage.getItem("mob"));
-
+    loader(50);
     console.clear();
     console.log(storedAppointmentData.selectedDoctor);
     // API call
@@ -171,6 +179,7 @@ export default function BookAppointment() {
         method: "post",
         body: formData,
       });
+      loader(80);
       if (response.ok) {
         toast("Successfully Registered");
       }

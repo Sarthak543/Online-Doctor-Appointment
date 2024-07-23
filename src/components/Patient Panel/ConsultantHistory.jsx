@@ -3,12 +3,13 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Table from "../Table/Table";
 
-export default function ConsultantHistory() {
+export default function ConsultantHistory({ loader }) {
   const [appointment, setappointment] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getAppointments() {
+      loader(30);
       try {
         const userName = sessionStorage.getItem("userName");
         const response = await fetch(
@@ -17,7 +18,7 @@ export default function ConsultantHistory() {
             method: "post",
           }
         );
-
+        loader(50);
         const data = await response.json();
         let currentDate = new Date();
         currentDate.setHours(0, 0, 0, 0);
@@ -26,17 +27,20 @@ export default function ConsultantHistory() {
           appointmentDate.setHours(0, 0, 0, 0);
           return appointmentDate.getTime() <= currentDate.getTime();
         });
-
+        loader(80);
         setappointment(todaysAppointments);
       } catch (error) {
         console.clear();
         console.log(error);
       }
     }
+    loader(10);
     getAppointments();
+    loader(100);
   }, []);
 
   async function deleteAppointment(id) {
+    loader(20);
     try {
       const response = await fetch(
         `http://localhost:8010/deletePatient/${id}`,
@@ -44,7 +48,7 @@ export default function ConsultantHistory() {
           method: "get",
         }
       );
-
+      loader(40);
       if (response.ok) {
         setappointment(
           appointment.filter((item) => item.appointmentNumber !== id)
@@ -53,10 +57,12 @@ export default function ConsultantHistory() {
       } else {
         console.error("Appointment deletion failed"); // Handle potential errors
       }
+      loader(70);
     } catch (error) {
       console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   const loadChatHistory = (appointmentNumber, patientName, doctorName) => {

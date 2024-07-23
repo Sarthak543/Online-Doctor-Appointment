@@ -3,7 +3,7 @@ import documentContext from "../context/Document_State/DocumentContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function SignIn() {
+export default function SignIn({ loader }) {
   let navigate = useNavigate();
   let url = "";
   const a = useContext(documentContext);
@@ -21,6 +21,7 @@ export default function SignIn() {
 
   const FormSignInHandler = async (e) => {
     e.preventDefault();
+    loader(20);
     if (signIn === "patient") {
       url = `http://localhost:8010/patientLogin/${email}/${password}`;
     } else {
@@ -37,25 +38,31 @@ export default function SignIn() {
         method: "post",
       });
       if (response == null) {
-        alert("No user found");
+        toast("No user found");
       } else {
         const data = await response.json();
-        toast.success("User Found");
         console.log(data);
 
+        // Store user info in session storage
+        sessionStorage.setItem("user", email);
+        sessionStorage.setItem("userName", data.name);
+        sessionStorage.setItem(
+          "mob",
+          signIn === "patient" ? data.mob : data.mobile
+        );
+        sessionStorage.setItem(
+          "userType",
+          signIn === "patient" ? "Patient" : "Doctor"
+        );
+
+        // Navigate to respective panel after successful sign-in
         if (signIn === "patient") {
-          sessionStorage.setItem("user", email);
-          sessionStorage.setItem("userName", data.name);
-          sessionStorage.setItem("mob", data.mob);
-          sessionStorage.setItem("userType", "Patient");
           navigate("/PatientPanel");
         } else {
-          sessionStorage.setItem("user", email);
-          sessionStorage.setItem("userName", data.name);
-          sessionStorage.setItem("mob", data.mobile);
-          sessionStorage.setItem("userType", "Doctor");
           navigate("/DoctorPanel");
         }
+
+        loader(100);
       }
     } catch (error) {
       console.log(error);

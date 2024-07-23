@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Table from "../Table/Table";
 
-export default function Doctors() {
+export default function Doctors({ loader }) {
   const [doctors, setdoctors] = useState([], []);
   const [update, setupdate] = useState(false);
 
   useEffect(() => {
     async function getDoctors() {
+      loader(20);
       try {
         const response = await fetch(
           "http://localhost:8010/getDoctorsDetails",
@@ -15,7 +16,7 @@ export default function Doctors() {
             method: "get",
           }
         );
-
+        loader(40);
         const data = await response.json();
         setdoctors(data);
       } catch (error) {
@@ -23,22 +24,26 @@ export default function Doctors() {
         console.log(error);
       }
     }
+    loader(10);
     getDoctors();
+    loader(100);
   }, [update]);
 
   async function deleteDoctor(id) {
     try {
+      loader(20);
       const response = await fetch(
         `http://localhost:8010/deleteDoctorRecord/${id}`,
         {
           method: "get",
         }
       );
-
+      loader(40);
       if (response.ok) {
         setdoctors(doctors.filter((item) => item.appointmentNumber !== id));
         toast("Account Deleted"); // Show toast only if deletion is successful
         setupdate(!update);
+        loader(70);
       } else {
         console.error("Unable to Delete account"); // Handle potential errors
       }
@@ -46,6 +51,7 @@ export default function Doctors() {
       console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   let columns = [

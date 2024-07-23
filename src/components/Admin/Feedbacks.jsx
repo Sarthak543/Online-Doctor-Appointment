@@ -2,39 +2,45 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Table from "../Table/Table";
 
-export default function Feedbacks() {
+export default function Feedbacks({ loader }) {
   const [feedbacks, setfeedbacks] = useState([]);
   const [clickedCell, setClickedCell] = useState(null);
 
   useEffect(() => {
     async function getFeedbacks() {
+      loader(20);
       try {
         const response = await fetch("http://localhost:8010/getFeedbacks", {
           method: "get",
         });
-
+        loader(40);
         const data = await response.json();
         setfeedbacks(data);
+        loader(70);
       } catch (error) {
         console.clear();
         console.log(error);
       }
     }
+    loader(10);
     getFeedbacks();
+    loader(100);
   }, []);
 
   async function deleteFeedback(id) {
     try {
+      loader(20);
       const response = await fetch(
         `http://localhost:8010/deleteFeedback?id=${id}`,
         {
           method: "delete",
         }
       );
-
+      loader(40);
       if (response.ok) {
         setfeedbacks(feedbacks.filter((item) => item.appointmentNumber !== id));
         toast("Feedback Deleted"); // Show toast only if deletion is successful
+        loader(70);
       } else {
         console.error("Unable to Delete Feedback"); // Handle potential errors
       }
@@ -42,6 +48,7 @@ export default function Feedbacks() {
       console.clear();
       console.log(error);
     }
+    loader(100);
   }
 
   const handleCellClick = (id) => {

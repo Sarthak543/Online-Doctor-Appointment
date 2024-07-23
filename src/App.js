@@ -30,7 +30,12 @@ import Patients from './components/Admin/Patients';
 import Doctors from './components/Admin/Doctors';
 import TotalAppoinntments from './components/Admin/TotalAppoinntments';
 import Feedbacks from './components/Admin/Feedbacks';
+import LoadingBar from 'react-top-loading-bar'
+import { useState } from 'react';
 function App() {
+
+  const [progress, setProgress] = useState(0)
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -47,7 +52,7 @@ function App() {
     },
     {
       path: 'signIn',
-      element: <SignIn />
+      element: <SignIn loader={setProgress} />
     },
     {
       path: 'PatientRegistration',
@@ -61,11 +66,11 @@ function App() {
       path: 'DoctorPanel',
       element: <DoctorPanel />,
       children: [
-        { path: "/DoctorPanel/check-appointment", element: <CheckAppointment /> },
-        { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow /> },
-        { path: "/DoctorPanel/upcoming-appointment", element: <UpcomingAppointment /> },
-        { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory /> },
-        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat /> },
+        { path: "/DoctorPanel/check-appointment", element: <CheckAppointment loader={setProgress} /> },
+        { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow loader={setProgress} /> },
+        { path: "/DoctorPanel/upcoming-appointment", element: <UpcomingAppointment loader={setProgress} /> },
+        { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory loader={setProgress} /> },
+        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat loader={setProgress} /> },
         { path: "/DoctorPanel/feedback", element: <FeedBack /> }
       ]
     },
@@ -73,10 +78,10 @@ function App() {
       path: 'PatientPanel',
       element: <PatientPanel />,
       children: [
-        { path: "/PatientPanel/bookAppointment", element: <BookAppointment /> },
-        { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory /> },
-        { path: "/PatientPanel/ConsultantHistory/showChat", element: <ShowChat /> },
-        { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment /> },
+        { path: "/PatientPanel/bookAppointment", element: <BookAppointment loader={setProgress} /> },
+        { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory loader={setProgress} /> },
+        { path: "/PatientPanel/ConsultantHistory/showChat", element: <ShowChat loader={setProgress} /> },
+        { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment loader={setProgress} /> },
         { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow /> },
         { path: "/PatientPanel/date", element: <Appointment_Calender /> },
         { path: "/PatientPanel/feedback", element: <FeedBack /> }
@@ -86,10 +91,10 @@ function App() {
       path: 'AdminPanel',
       element: <AdminPanel />,
       children: [
-        { path: "/AdminPanel/patients", element: <Patients /> },
-        { path: "/AdminPanel/doctors", element: <Doctors /> },
-        { path: "/AdminPanel/all-appointments", element: <TotalAppoinntments /> },
-        { path: "/AdminPanel/feedbacks", element: <Feedbacks /> }
+        { path: "/AdminPanel/patients", element: <Patients loader={setProgress} /> },
+        { path: "/AdminPanel/doctors", element: <Doctors loader={setProgress} /> },
+        { path: "/AdminPanel/all-appointments", element: <TotalAppoinntments loader={setProgress} /> },
+        { path: "/AdminPanel/feedbacks", element: <Feedbacks loader={setProgress} /> }
       ]
     }
   ])
@@ -99,6 +104,11 @@ function App() {
         <PatientState>
           <WebSocketProvider>
             <NavBar />
+            <LoadingBar
+              color='#f11946'
+              progress={progress}
+              onLoaderFinished={() => setProgress(0)}
+            />
             <RouterProvider router={router} />
           </WebSocketProvider>
         </PatientState>

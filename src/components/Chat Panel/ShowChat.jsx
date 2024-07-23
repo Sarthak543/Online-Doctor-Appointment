@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-export default function ShowChat() {
+export default function ShowChat({ loader }) {
   const location = useLocation();
   const { appointmentNumber, person, name } = location.state;
   const [messages, setmessages] = useState([]);
@@ -9,6 +9,7 @@ export default function ShowChat() {
   useEffect(() => {
     // getting all the appointment history
     async function getHistory() {
+      loader(30);
       try {
         const response = await fetch(
           `http://localhost:8010/getHistory/${appointmentNumber}`,
@@ -16,15 +17,15 @@ export default function ShowChat() {
             method: "get",
           }
         );
-
         const data = await response.json();
         setmessages(data);
+        loader(50);
       } catch (error) {
         console.clear();
         console.log(error);
       }
     }
-
+    loader(10);
     getHistory();
 
     setTimeout(() => {
@@ -35,6 +36,7 @@ export default function ShowChat() {
         });
       }
     }, 100);
+    loader(100);
   }, []);
 
   return (
