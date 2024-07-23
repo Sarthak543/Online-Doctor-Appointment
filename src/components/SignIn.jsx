@@ -3,7 +3,7 @@ import documentContext from "../context/Document_State/DocumentContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-export default function SignIn({ loader }) {
+export default function SignIn() {
   let navigate = useNavigate();
   let url = "";
   const a = useContext(documentContext);
@@ -21,7 +21,6 @@ export default function SignIn({ loader }) {
 
   const FormSignInHandler = async (e) => {
     e.preventDefault();
-    loader(20);
     if (signIn === "patient") {
       url = `http://localhost:8010/patientLogin/${email}/${password}`;
     } else {
@@ -46,6 +45,7 @@ export default function SignIn({ loader }) {
         // Store user info in session storage
         sessionStorage.setItem("user", email);
         sessionStorage.setItem("userName", data.name);
+        sessionStorage.setItem("id", data.id);
         sessionStorage.setItem(
           "mob",
           signIn === "patient" ? data.mob : data.mobile
@@ -61,8 +61,6 @@ export default function SignIn({ loader }) {
         } else {
           navigate("/DoctorPanel");
         }
-
-        loader(100);
       }
     } catch (error) {
       console.log(error);

@@ -170,6 +170,7 @@ export default function BookAppointment({ loader }) {
     formData.append("problem", storedAppointmentData.problem);
     formData.append("patientName", sessionStorage.getItem("userName"));
     formData.append("pNumber", sessionStorage.getItem("mob"));
+    formData.append("PID", sessionStorage.getItem("id"));
     loader(50);
     console.clear();
     console.log(storedAppointmentData.selectedDoctor);
