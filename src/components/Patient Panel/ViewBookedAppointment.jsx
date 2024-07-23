@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useWebSocket } from "../Chat Panel/WebSocketContext";
 import Table from "../Table/Table";
 
 export default function ViewBookedAppointment() {
   const [appointment, setappointment] = useState([]);
-  const { connect } = useWebSocket();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +24,7 @@ export default function ViewBookedAppointment() {
         const todaysAppointments = await data.filter((appointment) => {
           const appointmentDate = new Date(appointment.date);
           appointmentDate.setHours(0, 0, 0, 0);
-          return appointmentDate.getTime() > currentDate.getTime();
+          return appointmentDate.getTime() >= currentDate.getTime();
         });
         setappointment(todaysAppointments);
       } catch (error) {
@@ -61,8 +59,7 @@ export default function ViewBookedAppointment() {
     }
   }
 
-  async function Consult(item) {
-    await connect();
+  function Consult(item) {
     navigate("Consult", {
       state: { item, name: item.patientName, heading: item.doctorName },
     });

@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 export default function ShowChat() {
   const location = useLocation();
-  const { appointmentNumber, person, name} = location.state;
+  const { appointmentNumber, person, name } = location.state;
   const [messages, setmessages] = useState([]);
   const messageContainerRef = useRef(null);
-
 
   useEffect(() => {
     // getting all the appointment history
@@ -54,17 +53,20 @@ export default function ShowChat() {
           style={{ scrollbarWidth: "none" }}
           ref={messageContainerRef}
         >
-          {messages.map((item,index) => {
-            if (item.sender !== name) {
+          {messages.map((item, index) => {
+            if (item.sender === person) {
               return (
-                <div key={index} className=" p-4 border ms-2 mt-2 rounded-3  bg-light max-width-50">
+                <div
+                  key={index}
+                  className=" p-4 border ms-2 mt-2 rounded-3  bg-light max-width-50"
+                >
                   {item.message}
                 </div>
               );
             } else {
               return (
                 <div
-                key={index}
+                  key={index}
                   className=" p-4 border mt-2 me-2 rounde-3 max-w-50 margin-left-50"
                   style={{ background: "rgba(226,255,199,255)" }}
                 >

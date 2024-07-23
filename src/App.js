@@ -15,6 +15,7 @@ import CheckAppointment from './components/Doctor Panel/CheckAppointment';
 import AppointmentHistory from './components/Doctor Panel/AppointmentHistory';
 import FeedBack from './components/Doctor Panel/FeedBack'
 import PatientPanel from './components/Patient Panel/PatientPanel';
+import AdminPanel from './components/Admin/AdminPanel';
 import BookAppointment from './components/Patient Panel/BookAppointment';
 import ConsultantHistory from './components/Patient Panel/ConsultantHistory';
 import UpcomingAppointment from './components/Doctor Panel/UpcomingAppointment';
@@ -25,6 +26,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import ChatWindow from './components/Chat Panel/ChatWindow';
 import { WebSocketProvider } from './components/Chat Panel/WebSocketContext';
 import ShowChat from './components/Chat Panel/ShowChat';
+import Patients from './components/Admin/Patients';
+import Doctors from './components/Admin/Doctors';
+import TotalAppoinntments from './components/Admin/TotalAppoinntments';
+import Feedbacks from './components/Admin/Feedbacks';
 function App() {
   const router = createBrowserRouter([
     {
@@ -75,6 +80,16 @@ function App() {
         { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow /> },
         { path: "/PatientPanel/date", element: <Appointment_Calender /> },
         { path: "/PatientPanel/feedback", element: <FeedBack /> }
+      ]
+    },
+    {
+      path: 'AdminPanel',
+      element: <AdminPanel />,
+      children: [
+        { path: "/AdminPanel/patients", element: <Patients /> },
+        { path: "/AdminPanel/doctors", element: <Doctors /> },
+        { path: "/AdminPanel/all-appointments", element: <TotalAppoinntments /> },
+        { path: "/AdminPanel/feedbacks", element: <Feedbacks /> }
       ]
     }
   ])

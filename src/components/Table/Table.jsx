@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 
-export default function Table({ columns, data, user }) {
+export default function Table({ columns, data, user, update }) {
   const [filteredAppointment, setfilteredAppointment] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     setfilteredAppointment(data);
-  }, [data]);
+  }, [data, update]);
 
   useEffect(() => {
     const Result = data.filter((appointment) => {
-      return user === "patient"
-        ? appointment.doctorName.toLowerCase().match(search.toLowerCase())
-        : appointment.patientName.toLowerCase().match(search.toLowerCase());
+      if (user === "patient")
+        return appointment.doctorName.toLowerCase().match(search.toLowerCase());
+      else if (user === "doctor")
+        return appointment.patientName
+          .toLowerCase()
+          .match(search.toLowerCase());
+      else if (user === "adminPatient")
+        return appointment.name.toLowerCase().match(search.toLowerCase());
     });
     setfilteredAppointment(Result);
   }, [search]);

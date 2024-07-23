@@ -24,7 +24,7 @@ export default function ConsultantHistory() {
         const todaysAppointments = await data.filter((appointment) => {
           const appointmentDate = new Date(appointment.date);
           appointmentDate.setHours(0, 0, 0, 0);
-          return appointmentDate.getTime() < currentDate.getTime();
+          return appointmentDate.getTime() <= currentDate.getTime();
         });
 
         setappointment(todaysAppointments);
@@ -61,7 +61,7 @@ export default function ConsultantHistory() {
 
   const loadChatHistory = (appointmentNumber, patientName, doctorName) => {
     navigate("showChat", {
-      state: { appointmentNumber, person: patientName, name: doctorName },
+      state: { appointmentNumber, person: doctorName, name: patientName },
     });
   };
 
