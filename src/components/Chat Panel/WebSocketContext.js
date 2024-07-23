@@ -17,8 +17,18 @@ export const WebSocketProvider = ({ children }) => {
         });
     };
 
+    const disconnect = (callback) => {
+        if (stompClient) {
+            stompClient.disconnect(() => {
+                console.log('Disconnected from WebSocket');
+                setStompClient(null);
+                if (callback) callback();
+            });
+        }
+    };
+
     return (
-        <WebSocketContext.Provider value={{ stompClient, connect }}>
+        <WebSocketContext.Provider value={{ stompClient, connect, disconnect }}>
             {children}
         </WebSocketContext.Provider>
     );

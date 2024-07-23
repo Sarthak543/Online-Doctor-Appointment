@@ -9,12 +9,15 @@ export default function ChatWindow() {
   const [isConnected, setIsConnected] = useState(true);
   const { item, name, heading } = location.state;
   // const name =
-  const { stompClient } = useWebSocket();
+  const { stompClient, disconnect, connect } = useWebSocket();
   const [messages, setmessages] = useState([]);
   const messageContainerRef = useRef(null);
   const i = 0;
 
   useEffect(() => {
+    if (!stompClient) {
+      connect();
+    }
     if (stompClient && isConnected) {
       console.log("subscribing to topic");
       const subscription = stompClient.subscribe(
@@ -68,10 +71,10 @@ export default function ChatWindow() {
 
   const handleDisconnect = () => {
     if (stompClient) {
-      stompClient.disconnect(() => {
+      disconnect(() => {
         console.log("Disconnected from WebSocket");
         setIsConnected(false);
-        navigate(-1);
+        navigate(-1); // Go back to the previous page
       });
     }
   };
