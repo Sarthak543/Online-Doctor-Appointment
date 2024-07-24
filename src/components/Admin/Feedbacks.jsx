@@ -72,6 +72,10 @@ export default function Feedbacks({ loader }) {
       selector: (row) => row.userName,
     },
     {
+      name: "Email",
+      selector: (row) => row.email,
+    },
+    {
       name: "Message",
       selector: (row) => row.message,
       cell: (row) => (

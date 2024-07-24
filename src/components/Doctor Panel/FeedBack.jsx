@@ -12,6 +12,7 @@ export default function FeedBack() {
     const formData = new FormData();
     formData.append("userType", sessionStorage.getItem("userType"));
     formData.append("userName", sessionStorage.getItem("userName"));
+    formData.append("Email", sessionStorage.getItem("Email"));
     formData.append("message", message);
 
     const response = await fetch("http://localhost:8010/saveFeedback", {

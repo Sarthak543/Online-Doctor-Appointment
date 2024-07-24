@@ -1,17 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function ContactUs() {
-  const backgroundStyle = {
-    position: "absolute",
-    backgroundImage: `url("../About-bg.jpg")`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center center",
-    backgroundSize: "cover",
-    height: "60%",
-    width: "25%",
-    marginLeft: "150px",
-    overflowX: "hidden",
-  };
+  const [Name, setName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Message, setMessage] = useState("");
+
+  async function onSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("userName", Name);
+    formData.append("Email", Email);
+    formData.append("message", Message);
+
+    const response = await fetch("http://localhost:8010/contactUS", {
+      method: "post",
+      body: formData,
+    });
+    if (response.ok) {
+      toast("Feedback submitted");
+    } else {
+      toast("Error while submitting feedback");
+    }
+  }
 
   return (
     <>
@@ -35,15 +46,20 @@ export default function ContactUs() {
           <h2 class="text-center mb-4">Contact Us</h2>
           <div class="row justify-content-center">
             <div class="col-md-8">
-              <form>
+              <form onSubmit={onSubmit}>
                 <div class="form-group">
                   <label for="name">Name</label>
                   <input
                     type="text"
                     class="form-control text-light custom-placeholder"
                     id="name"
+                    name="userName"
                     placeholder="Enter your name"
                     style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    value={Name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group mt-1">
@@ -54,26 +70,25 @@ export default function ContactUs() {
                     id="email"
                     placeholder="Enter your email"
                     style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    value={Email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                   />
                 </div>
                 <div class="form-group mt-1">
-                  <label for="subject">Subject</label>
-                  <input
-                    type="text"
-                    class="form-control text-light custom-placeholder"
-                    id="subject"
-                    placeholder="Enter subject"
-                    style={{ background: "rgba(0, 0, 0, 0.3)" }}
-                  />
-                </div>
-                <div class="form-group mt-1">
-                  <label for="message">Message</label>
+                  <label for="messageID">Message</label>
                   <textarea
                     class="form-control text-light custom-placeholder"
-                    id="message"
+                    id="messageID"
+                    className="message"
                     rows="5"
                     placeholder="Enter your message"
                     style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    value={Message}
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                    }}
                   ></textarea>
                 </div>
                 <div className="text-center mt-4">

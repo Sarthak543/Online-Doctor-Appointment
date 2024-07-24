@@ -43,7 +43,7 @@ export default function SignIn() {
         console.log(data);
 
         // Store user info in session storage
-        sessionStorage.setItem("user", email);
+        sessionStorage.setItem("Email", email);
         sessionStorage.setItem("userName", data.name);
         sessionStorage.setItem("id", data.id);
         sessionStorage.setItem(

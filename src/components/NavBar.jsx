@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const { isUserLogIn, setisUserLogIn } = useContext(documentContext);
