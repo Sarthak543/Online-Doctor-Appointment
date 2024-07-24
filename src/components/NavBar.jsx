@@ -54,17 +54,12 @@ export default function NavBar() {
                   </a>
                 </li>
                 <li className="nav-item me-5">
-                  <a className="nav-link fs-" href="#">
-                    Pricing
-                  </a>
-                </li>
-                <li className="nav-item me-5">
-                  <a className="nav-link fs-" href="#">
+                  <a className="nav-link fs-" href="contact">
                     Contact
                   </a>
                 </li>
                 <li className="nav-item me-5">
-                  <a className="nav-link fs-" href="#">
+                  <a className="nav-link fs-" href="about">
                     About
                   </a>
                 </li>

@@ -32,6 +32,8 @@ import TotalAppoinntments from './components/Admin/TotalAppoinntments';
 import Feedbacks from './components/Admin/Feedbacks';
 import LoadingBar from 'react-top-loading-bar'
 import { useState } from 'react';
+import About from './components/About';
+import ContactUs from './components/ContactUs';
 function App() {
 
   const [progress, setProgress] = useState(0)
@@ -40,6 +42,14 @@ function App() {
     {
       path: "/",
       element: <Home />
+    },
+    {
+      path: "/about",
+      element: <About />
+    },
+    {
+      path: "/contact",
+      element: <ContactUs />
     },
     {
       path: "/DocterRegistration",
