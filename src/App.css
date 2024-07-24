@@ -116,3 +116,8 @@
 .logo {
   height: 20px;
 }
+
+.custom-placeholder::placeholder {
+  color: white;
+  opacity: 1; /* Ensures the color is fully opaque */
+}
