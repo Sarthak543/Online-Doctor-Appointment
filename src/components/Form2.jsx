@@ -8,7 +8,7 @@ export default function Form2() {
   const imageHandler = (e) => {
     const file = e.target.files[0];
     const name = e.target.name;
-  
+
     // Update the state immutably
     setDocData((prevState) => {
       const newState = { ...prevState, [name]: file };
@@ -16,7 +16,6 @@ export default function Form2() {
       return newState;
     });
   };
-  
 
   const onChangeHandler = (e) => {
     setDocData({ ...docData, [e.target.name]: e.target.value });
@@ -25,30 +24,53 @@ export default function Form2() {
   // Submit handler
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData();
+    const expLetter = document.querySelector("#experienceLetter");
+    const profileIMG = document.querySelector("#ProfilePicture");
 
-    //appending all the data from docData to formData
-    Object.keys(docData).forEach((key) => {
-      formData.append(key, docData[key]);
-    });
+    if (
+      expLetter.files.length == 0 ||
+      expLetter.files[0].size > 2 * 1024 * 1024
+    ) {
+      document.getElementById("EXPfileSizeError").classList.remove("d-none");
+    } else if (!expLetter.files[0].type.match("image/jpeg")) {
+      document.getElementById("EXPfileFormatError").classList.remove("d-none");
+    } else if (
+      profileIMG.files.length == 0 ||
+      profileIMG.files[0].size > 2 * 1024 * 1024
+    ) {
+      document
+        .getElementById("PROFILE_fileSizeError")
+        .classList.remove("d-none");
+    } else if (!profileIMG.files[0].type.match("image/jpeg")) {
+      document
+        .getElementById("PROFILE_fileFormatError")
+        .classList.remove("d-none");
+    } else {
+      const formData = new FormData();
 
-    // API call
-    try {
-      const response = await fetch(
-        "http://localhost:8010/doctorRegistration",
-        {
-          method: "post",
-          body: formData,
+      //appending all the data from docData to formData
+      Object.keys(docData).forEach((key) => {
+        formData.append(key, docData[key]);
+      });
+
+      // API call
+      try {
+        const response = await fetch(
+          "http://localhost:8010/doctorRegistration",
+          {
+            method: "post",
+            body: formData,
+          }
+        );
+        if (response.ok) {
+          alert("Successfully Registered");
         }
-      );
-      if (response.ok) {
-        alert("Successfully Registered");
-      }
-    } catch (error) {
-      alert("Error occur");
-      console.error(error);
-    }finally{
+      } catch (error) {
+        alert("Error occur");
+        console.error(error);
+      } finally {
         console.log(docData);
+      }
     }
   };
 
@@ -103,11 +125,19 @@ export default function Form2() {
               <input
                 class="form-control mt-2"
                 type="file"
-                id="formFile"
+                id="experienceLetter"
                 name="expLetter"
                 placeholder="Upload Experience letter"
                 onChange={imageHandler}
               />
+              <div>
+                <p id="EXPfileSizeError" className="text-danger d-none">
+                  Please select an image under 2MB.
+                </p>
+                <p id="EXPfileFormatError" className="text-danger d-none">
+                  Please select a JPEG/JPG image.
+                </p>
+              </div>
             </div>
             <label htmlFor="formFile" class="form-label col-6 mt-3">
               Upload Experience Letter
@@ -181,10 +211,18 @@ export default function Form2() {
                 class="form-control mt-2"
                 type="file"
                 name="dp"
-                id="formFile1"
+                id="ProfilePicture"
                 placeholder="Profile Photo"
                 onChange={imageHandler}
               />
+              <div>
+                <p id="PROFILE_fileSizeError" className="text-danger d-none">
+                  Please select an image under 2MB.
+                </p>
+                <p id="PROFILE_fileFormatError" className="text-danger d-none">
+                  Please select a JPEG/JPG image.
+                </p>
+              </div>
             </div>
             <label htmlFor="formFile" class="form-label col-6 mt-3">
               Profile picture
