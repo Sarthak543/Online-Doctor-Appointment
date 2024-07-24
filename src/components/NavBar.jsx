@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
+import { Link, NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const { isUserLogIn, setisUserLogIn } = useContext(documentContext);
@@ -45,23 +46,31 @@ export default function NavBar() {
             >
               <ul className="navbar-nav">
                 <li className="nav-item me-5">
-                  <a
-                    className="nav-link active fs-"
-                    aria-current="page"
-                    href="/"
+                  <NavLink
+                    className="nav-link fs-"
+                    activeClassName="active"
+                    to="/"
                   >
                     Home
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item me-5">
-                  <a className="nav-link fs-" href="contact">
+                  <NavLink
+                    className="nav-link fs-"
+                    activeClassName="active"
+                    to="contact"
+                  >
                     Contact
-                  </a>
+                  </NavLink>
                 </li>
                 <li className="nav-item me-5">
-                  <a className="nav-link fs-" href="about">
+                  <NavLink
+                    className="nav-link fs-"
+                    activeClassName="active"
+                    to="about"
+                  >
                     About
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </div>

@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import DocterRegisteration from './components/DocterRegisteration';
 import Home from './components/Home';
@@ -21,7 +21,7 @@ import ConsultantHistory from './components/Patient Panel/ConsultantHistory';
 import UpcomingAppointment from './components/Doctor Panel/UpcomingAppointment';
 import ViewBookedAppointment from './components/Patient Panel/ViewBookedAppointment';
 import Appointment_Calender from './components/Patient Panel/Appointment_Calender';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ChatWindow from './components/Chat Panel/ChatWindow';
 import { WebSocketProvider } from './components/Chat Panel/WebSocketContext';
@@ -40,89 +40,83 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <Home />
-    },
-    {
-      path: "/about",
-      element: <About />
-    },
-    {
-      path: "/contact",
-      element: <ContactUs />
-    },
-    {
-      path: "/DocterRegistration",
-      element: <DocterRegisteration />,
+      path: '/',
+      element: (
+        <>
+          <NavBar /> {/* NavBar placed here */}
+          <LoadingBar
+            color='#f11946'
+            progress={progress}
+            onLoaderFinished={() => setProgress(0)}
+          />
+          <Outlet />
+        </>
+      ),
       children: [
-        { path: "DocterRegistration", element: <DocterRegisteration /> }, // Default route within DoctorRegistration
-        { path: "/DocterRegistration/form1", element: <Form1 /> },
-        { path: "/DocterRegistration/form2", element: <Form2 /> }
-      ]
+        { path: '', element: <Home /> },
+        { path: 'about', element: <About /> },
+        { path: 'contact', element: <ContactUs /> },
+        {
+          path: 'DocterRegistration',
+          element: <DocterRegisteration />,
+          children: [
+            { path: '', element: <DocterRegisteration /> }, // Default route within DoctorRegistration
+            { path: 'form1', element: <Form1 /> },
+            { path: 'form2', element: <Form2 /> },
+          ],
+        },
+        { path: 'signIn', element: <SignIn loader={setProgress} /> },
+        { path: 'PatientRegistration', element: <PatientRegistration /> },
+        { path: 'Register', element: <Register /> },
+        {
+          path: 'DoctorPanel',
+          element: <DoctorPanel />,
+          children: [
+            { path: 'check-appointment', element: <CheckAppointment loader={setProgress} /> },
+            { path: 'check-appointment/Consult', element: <ChatWindow loader={setProgress} /> },
+            { path: 'upcoming-appointment', element: <UpcomingAppointment loader={setProgress} /> },
+            { path: 'consultant-history', element: <AppointmentHistory loader={setProgress} /> },
+            { path: 'consultant-history/showChat', element: <ShowChat loader={setProgress} /> },
+            { path: 'feedback', element: <FeedBack /> },
+          ],
+        },
+        {
+          path: 'PatientPanel',
+          element: <PatientPanel />,
+          children: [
+            { path: 'bookAppointment', element: <BookAppointment loader={setProgress} /> },
+            { path: 'ConsultantHistory', element: <ConsultantHistory loader={setProgress} /> },
+            { path: 'ConsultantHistory/showChat', element: <ShowChat loader={setProgress} /> },
+            { path: 'viewBookedAppointment', element: <ViewBookedAppointment loader={setProgress} /> },
+            { path: 'viewBookedAppointment/Consult', element: <ChatWindow /> },
+            { path: 'date', element: <Appointment_Calender /> },
+            { path: 'feedback', element: <FeedBack /> },
+          ],
+        },
+        {
+          path: 'AdminPanel',
+          element: <AdminPanel />,
+          children: [
+            { path: 'patients', element: <Patients loader={setProgress} /> },
+            { path: 'doctors', element: <Doctors loader={setProgress} /> },
+            { path: 'all-appointments', element: <TotalAppoinntments loader={setProgress} /> },
+            { path: 'feedbacks', element: <Feedbacks loader={setProgress} /> },
+          ],
+        },
+      ],
     },
-    {
-      path: 'signIn',
-      element: <SignIn loader={setProgress} />
-    },
-    {
-      path: 'PatientRegistration',
-      element: <PatientRegistration />
-    },
-    {
-      path: 'Register',
-      element: <Register />
-    },
-    {
-      path: 'DoctorPanel',
-      element: <DoctorPanel />,
-      children: [
-        { path: "/DoctorPanel/check-appointment", element: <CheckAppointment loader={setProgress} /> },
-        { path: "/DoctorPanel/check-appointment/Consult", element: <ChatWindow loader={setProgress} /> },
-        { path: "/DoctorPanel/upcoming-appointment", element: <UpcomingAppointment loader={setProgress} /> },
-        { path: "/DoctorPanel/consultant-history", element: <AppointmentHistory loader={setProgress} /> },
-        { path: "/DoctorPanel/consultant-history/showChat", element: <ShowChat loader={setProgress} /> },
-        { path: "/DoctorPanel/feedback", element: <FeedBack /> }
-      ]
-    },
-    {
-      path: 'PatientPanel',
-      element: <PatientPanel />,
-      children: [
-        { path: "/PatientPanel/bookAppointment", element: <BookAppointment loader={setProgress} /> },
-        { path: "/PatientPanel/ConsultantHistory", element: <ConsultantHistory loader={setProgress} /> },
-        { path: "/PatientPanel/ConsultantHistory/showChat", element: <ShowChat loader={setProgress} /> },
-        { path: "/PatientPanel/viewBookedAppointment", element: <ViewBookedAppointment loader={setProgress} /> },
-        { path: "/PatientPanel/viewBookedAppointment/Consult", element: <ChatWindow /> },
-        { path: "/PatientPanel/date", element: <Appointment_Calender /> },
-        { path: "/PatientPanel/feedback", element: <FeedBack /> }
-      ]
-    },
-    {
-      path: 'AdminPanel',
-      element: <AdminPanel />,
-      children: [
-        { path: "/AdminPanel/patients", element: <Patients loader={setProgress} /> },
-        { path: "/AdminPanel/doctors", element: <Doctors loader={setProgress} /> },
-        { path: "/AdminPanel/all-appointments", element: <TotalAppoinntments loader={setProgress} /> },
-        { path: "/AdminPanel/feedbacks", element: <Feedbacks loader={setProgress} /> }
-      ]
-    }
-  ])
+  ]);
+
+
   return (
     <>
       <DocumentState>
         <PatientState>
           <WebSocketProvider>
-            <NavBar />
-            <LoadingBar
-              color='#f11946'
-              progress={progress}
-              onLoaderFinished={() => setProgress(0)}
-            />
             <RouterProvider router={router} />
           </WebSocketProvider>
         </PatientState>
-      </DocumentState>
+      </DocumentState >
       <ToastContainer
         position="top-center"
         theme="dark"
