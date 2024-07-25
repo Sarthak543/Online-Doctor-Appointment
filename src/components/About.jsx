@@ -49,7 +49,7 @@ export default function About() {
             <img
               src="../about-bg.jpg"
               style={backgroundStyle}
-              class="img-fluid"
+              class="img-fluid rounded-1"
               alt="Healthcare Image"
             />
           </div>
