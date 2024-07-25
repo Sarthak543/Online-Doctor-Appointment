@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import documentContext from "../context/Document_State/DocumentContext";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -6,9 +6,11 @@ import { toast } from "react-toastify";
 export default function SignIn() {
   let navigate = useNavigate();
   let url = "";
+  const modalRef = useRef(null);
   const a = useContext(documentContext);
   const { signIn } = a;
   const [email, setEmail] = useState("");
+  const [ForgetEmail, setForgetEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignUp = () => {
@@ -67,6 +69,27 @@ export default function SignIn() {
       toast.error("Incorrect Details");
     }
   };
+
+  function modal() {
+    modalRef.current.click();
+  }
+
+  async function forgetPassword(e) {
+    e.preventDefault();
+    if (signIn === "patient") {
+      url = `http://localhost:8010/patientLogin/forgetPassword?email=${ForgetEmail}`;
+    } else {
+      url = `http://localhost:8010/doctorLogin/forgetPassword?email=${ForgetEmail}`;
+    }
+    const response = await fetch(url, {
+      method: "post",
+    });
+    if (response.ok) {
+      toast("Password has been sent to your registered email");
+    } else {
+      toast("No User Found by this email");
+    }
+  }
 
   return (
     <>
@@ -128,22 +151,88 @@ export default function SignIn() {
               Submit
             </button>
           </form>
-          <p className="text-end text-secondary me-3 mb-0">Forget password?</p>
-          <p className="text-center fs-7 text-dark mb-2">OR</p>
-          <div className="d-flex justify-content-center">
-            <button className="btn  me-4 border rounded-3">
-              <img className="logo" src="../google.png" alt="#" />
-              <p className=" ms-2 d-inline">Google</p>
-            </button>
-            <button className="btn border rounded-3">
-              <img className="logo" src="../facebook.png" alt="#" />
-              <p className=" ms-2 d-inline">Facebook</p>
-            </button>
-          </div>
-          <div className="text-center">
+          <button
+            className="btn text-secondary p-0"
+            style={{ marginLeft: "60%" }}
+            onClick={modal}
+          >
+            Forget password?
+          </button>
+          <div className="text-center mt-4">
             <Link className="text-reset" onClick={handleSignUp}>
               Create Account
             </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* modal */}
+      <button
+        type="button"
+        class="btn btn-primary d-none"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+        ref={modalRef}
+      >
+        Launch demo modal
+      </button>
+
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">
+                Forget Password
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label font-style">
+                    Email{" "}
+                  </label>
+
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="recipient-name"
+                    value={ForgetEmail}
+                    onChange={(e) => {
+                      setForgetEmail(e.target.value);
+                    }}
+                  />
+                </div>
+                <p>Your password will be send to your registered email ID</p>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                onClick={forgetPassword}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </div>
       </div>
