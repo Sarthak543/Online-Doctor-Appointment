@@ -76,21 +76,23 @@ export default function ContactUs() {
                     }}
                   />
                 </div>
+
                 <div class="form-group mt-1">
                   <label for="messageID">Message</label>
                   <textarea
-                    class="form-control text-light custom-placeholder"
+                    class="form-control text-light custom-placeholder ms-1"
                     id="messageID"
                     className="message"
                     rows="5"
                     placeholder="Enter your message"
-                    style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    style={{ background: "rgba(0, 0, 0, 0.3)", width: "98%" }}
                     value={Message}
                     onChange={(e) => {
                       setMessage(e.target.value);
                     }}
-                  ></textarea>
+                  />
                 </div>
+
                 <div className="text-center mt-4">
                   <button type="submit" class="btn btn-success me-5">
                     Submit
