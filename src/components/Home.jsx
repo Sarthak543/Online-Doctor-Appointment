@@ -61,7 +61,7 @@ export default function Home() {
         <div className="ms-5 text-center">
           <Link to={"signIn"}>
             <button
-              className="btn btn-outline-success me-4"
+              className="btn btn-success me-4"
               name="patient"
               onClick={signInHandler}
             >
@@ -70,7 +70,7 @@ export default function Home() {
           </Link>
           <Link to={"signIn"}>
             <button
-              className="btn btn-outline-primary"
+              className="btn btn-primary"
               name="Doctor"
               onClick={signInHandler}
             >
