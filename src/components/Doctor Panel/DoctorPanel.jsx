@@ -10,7 +10,7 @@ export default function DoctorPanel() {
 
   useEffect(() => {
     async function fetchedDoctorData() {
-      const doctorEmail = sessionStorage.getItem("user");
+      const doctorEmail = sessionStorage.getItem("Email");
       const response = await fetch(
         `http://localhost:8010/DoctorDetail?email=${doctorEmail}`,
         { method: "post" }

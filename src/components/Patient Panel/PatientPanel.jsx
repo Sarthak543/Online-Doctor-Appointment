@@ -9,11 +9,12 @@ export default function PatientPanel() {
 
   useEffect(() => {
     async function fetchedUserData() {
-      const patientEmail = sessionStorage.getItem("user");
+      const patientEmail = sessionStorage.getItem("Email");
       const response = await fetch(
         `http://localhost:8010/PatientDetail?email=${patientEmail}`,
         { method: "post" }
       );
+      console.log(response);
       const data = await response.json();
       setpatient(data);
       setisUserLogIn(true); // imp
