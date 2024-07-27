@@ -1,6 +1,6 @@
 # Steps to run this project 
 
-Install Required Software: Please install Oracle Database, React, and any Java IDE on your system.
+## Install Required Software: Please install Oracle Database, React, and any Java IDE on your system.
 
 Open Project in IDEs: Open the backend folder in Eclipse IDE and the frontend in Visual Studio Code (VSCode).
 
